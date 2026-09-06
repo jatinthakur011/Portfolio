@@ -34,6 +34,35 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:image",
+        content: "https://jatin-portfolio-six-lovat.vercel.app/og-image.png",
+      },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        name: "twitter:image",
+        content: "https://jatin-portfolio-six-lovat.vercel.app/og-image.png",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Jatin Thakur",
+          jobTitle: "Full-Stack Developer & DevOps Engineer",
+          url: "https://jatin-portfolio-six-lovat.vercel.app/",
+          email: "mailto:jatuthakur170@gmail.com",
+          telephone: "+91-8091259662",
+          sameAs: [
+            "https://www.linkedin.com/in/jatin--thakur/",
+            "https://github.com/jatinthakur011",
+            "https://leetcode.com/u/Jatin_thakur01/",
+          ],
+        }),
+      },
     ],
   }),
   component: Portfolio,
@@ -208,6 +237,15 @@ function Portfolio() {
               </a>
               <a href="#contact" className="btn-ghost-outline">
                 Get In Touch
+              </a>
+              <a
+                href="/resume/Jatin_Thakur_Resume_DevOps.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="btn-ghost-outline"
+              >
+                Download Resume
               </a>
             </div>
 
@@ -521,6 +559,15 @@ function Portfolio() {
               <div className="mt-9 text-center">
                 <a href="mailto:jatuthakur170@gmail.com" className="btn-solid">
                   Say Hello 👋
+                </a>
+                <a
+                  href="/resume/Jatin_Thakur_Resume_DevOps.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="mt-4 block text-sm text-ink-soft underline decoration-[color-mix(in_oklab,var(--primary)_45%,transparent)] underline-offset-4 transition-colors hover:text-ink"
+                >
+                  Download Resume
                 </a>
               </div>
             </div>

@@ -1,3 +1,5 @@
+import { Phone } from "lucide-react";
+
 export const NAV_LINKS = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
@@ -132,6 +134,11 @@ export const CONTACTS = [
     glyph: "✉",
     label: "jatuthakur170@gmail.com",
     href: "mailto:jatuthakur170@gmail.com",
+  },
+  {
+    glyph: <Phone size={15} strokeWidth={1.8} />,
+    label: "+91 8091259662",
+    href: "tel:+918091259662",
   },
   {
     glyph: "in",

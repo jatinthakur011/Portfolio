@@ -564,7 +564,7 @@ function Portfolio() {
               <SkillsSphere groups={SKILL_GROUPS} />
             </div>
             <div className="skills-grid-mobile grid gap-11 sm:grid-cols-2 sm:gap-x-14">
-              {SKILL_GROUPS.map((group) => (
+              {SKILL_GROUPS.map((group, index) => (
                 <motion.div
                   key={group.title}
                   initial={{ opacity: 0, rotateX: 10, y: 18 }}

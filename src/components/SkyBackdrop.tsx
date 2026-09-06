@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { MissionControlScene } from "./MissionControlScene";
 
 type Star = { left: string; top: string; size: string; delay: string };
 type Meteor = { left: string; delay: string; duration: string };
@@ -38,7 +39,8 @@ export function SkyBackdrop() {
 
   return (
     <>
-      <div className="sky-field" aria-hidden="true">
+      <MissionControlScene />
+      <div className="sky-field sky-field-fallback" aria-hidden="true">
         <div className="absolute inset-0">
           {mounted && stars.map((star, i) => (
             <span

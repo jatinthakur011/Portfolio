@@ -685,3 +685,240 @@
   animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards,
     float-soft 6s ease-in-out 0.7s infinite;
 }
+
+.mission-control-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+}
+
+.mission-control-scene canvas {
+  display: block;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.mission-horizon {
+  position: absolute;
+  right: -12vw;
+  bottom: -46vh;
+  left: -12vw;
+  height: 58vh;
+  border-radius: 50% 50% 0 0;
+  border-top: 1px solid color-mix(in oklab, var(--primary) 46%, transparent);
+  background: radial-gradient(ellipse at center, color-mix(in oklab, var(--primary) 19%, transparent), transparent 65%);
+  box-shadow: 0 -10px 80px color-mix(in oklab, var(--primary) 24%, transparent);
+}
+
+.sky-field-fallback {
+  display: none;
+}
+
+.cursor-glow {
+  position: fixed;
+  top: -42px;
+  left: -42px;
+  z-index: 1;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: color-mix(in oklab, var(--primary) 22%, transparent);
+  filter: blur(18px);
+  opacity: 0.42;
+}
+
+.photo-frame-desktop {
+  position: absolute;
+  inset: -14px;
+  z-index: 2;
+}
+
+.photo-frame-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 22px color-mix(in oklab, var(--primary) 45%, transparent));
+}
+
+.photo-frame-3d canvas {
+  position: relative;
+  z-index: 2;
+}
+
+.photo-frame-rim {
+  position: absolute;
+  inset: 5px;
+  z-index: 1;
+  border: 1px solid color-mix(in oklab, var(--signal) 62%, transparent);
+  border-radius: 50%;
+  box-shadow: inset 0 0 16px color-mix(in oklab, var(--primary) 42%, transparent), 0 0 20px color-mix(in oklab, var(--signal) 28%, transparent);
+  pointer-events: none;
+}
+
+.photo-frame-mobile {
+  display: none;
+}
+
+.skills-sphere-desktop {
+  height: 430px;
+  margin: -24px auto 10px;
+  max-width: 760px;
+}
+
+.skills-sphere-wrap,
+.skills-sphere-wrap canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.sphere-skill-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  border-radius: 999px;
+  padding: 0.42rem 0.78rem;
+  background: color-mix(in oklab, var(--primary) 14%, var(--background));
+  color: color-mix(in oklab, var(--primary) 55%, white);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  cursor: grab;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sphere-skill-pill:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 18px color-mix(in oklab, var(--primary) 38%, transparent);
+}
+
+.skills-sphere-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.4rem;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.skills-sphere-legend .legend-signal {
+  color: var(--signal);
+}
+
+.project-flip-shell {
+  min-height: 425px;
+  cursor: pointer;
+  perspective: 1200px;
+}
+
+.project-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-flip-shell.is-flipped .project-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.project-face {
+  position: absolute;
+  inset: 0;
+  min-height: inherit;
+  backface-visibility: hidden;
+}
+
+.project-face-back {
+  display: flex;
+  flex-direction: column;
+  transform: rotateY(180deg);
+}
+
+.project-flip-affordance {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+  color: var(--ink-dim);
+}
+
+.pipeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.55rem;
+  padding-top: 1.1rem;
+}
+
+.pipeline::before {
+  content: "";
+  position: absolute;
+  top: 0.25rem;
+  right: 8%;
+  left: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary), var(--signal));
+}
+
+.pipeline-stage {
+  position: relative;
+  z-index: 1;
+  border: 1px solid color-mix(in oklab, var(--signal) 28%, transparent);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--background);
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+}
+
+.pipeline-stage::before {
+  content: "";
+  position: absolute;
+  top: -0.98rem;
+  left: 50%;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 10px var(--signal);
+  animation: pipeline-pulse 2.4s ease-in-out infinite;
+}
+
+.pipeline-stage:nth-child(2)::before { animation-delay: 0.8s; }
+.pipeline-stage:nth-child(3)::before { animation-delay: 1.6s; }
+
+@keyframes pipeline-pulse {
+  0%, 100% { transform: translateX(-50%) scale(0.8); opacity: 0.45; }
+  50% { transform: translateX(-50%) scale(1.25); opacity: 1; }
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .mission-control-scene,
+  .cursor-glow,
+  .photo-frame-desktop,
+  .skills-sphere-desktop {
+    display: none;
+  }
+
+  .sky-field-fallback {
+    display: block;
+  }
+
+  .photo-frame-mobile,
+  .skills-grid-mobile {
+    display: block;
+  }
+
+  .skills-grid-mobile {
+    display: grid;
+  }
+}

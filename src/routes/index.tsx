@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUp, Copy } from "lucide-react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 
 import { SkyBackdrop } from "@/components/SkyBackdrop";
+import { PhotoFrame3D } from "@/components/PhotoFrame3D";
+import { SkillsSphere } from "@/components/SkillsSphere";
 import {
   ABOUT_CARDS,
   CONTACTS,
@@ -147,7 +150,13 @@ function SectionHeading({
   eyebrow?: string;
 }) {
   return (
-    <div className="mb-14 text-center">
+    <motion.div
+      className="mb-14 text-center"
+      initial={{ opacity: 0, rotateX: 10, y: 18 }}
+      whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
       {eyebrow ? <p className="eyebrow mb-4">{eyebrow}</p> : null}
       <h2 className="section-title">{title}</h2>
       {subtitle ? (
@@ -155,7 +164,70 @@ function SectionHeading({
           {subtitle}
         </p>
       ) : null}
-    </div>
+    </motion.div>
+  );
+}
+
+function CursorGlow() {
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const springX = useSpring(x, { stiffness: 140, damping: 24, mass: 0.4 });
+  const springY = useSpring(y, { stiffness: 140, damping: 24, mass: 0.4 });
+
+  useEffect(() => {
+    const move = (event: PointerEvent) => {
+      x.set(event.clientX);
+      y.set(event.clientY);
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => window.removeEventListener("pointermove", move);
+  }, [x, y]);
+
+  return <motion.div className="cursor-glow" style={{ x: springX, y: springY }} aria-hidden="true" />;
+}
+
+function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, rotateX: 10, y: 22 }}
+      whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.65, delay: index * 0.08, ease: "easeOut" }}
+      onMouseMove={spotlight}
+      className={`project-flip-shell ${flipped ? "is-flipped" : ""}`}
+      onClick={() => setFlipped((value) => !value)}
+    >
+      <div className="project-flip-inner">
+        <div className="project-face glow-card group flex flex-col p-8">
+          <span className="project-flip-affordance" aria-hidden="true"><Rotate3D size={16} /></span>
+          <span className="absolute inset-x-0 top-0 h-[3px]" style={{ background: `linear-gradient(90deg, ${project.accent}, transparent 85%)` }} />
+          <div className="relative z-10 mb-5 flex h-12 w-12 items-center justify-center rounded-[0.85rem] border" style={{ background: `color-mix(in oklab, ${project.accent} 14%, transparent)`, borderColor: `color-mix(in oklab, ${project.accent} 32%, transparent)` }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke={project.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5.5 w-5.5" aria-hidden="true">{project.icon}</svg>
+          </div>
+          <p className="relative z-10 mb-2.5 font-mono text-[0.72rem] tracking-wider" style={{ color: project.accent }}>{project.kicker}</p>
+          <h3 className="relative z-10 mb-3 text-xl text-ink">{project.title}</h3>
+          <p className="relative z-10 mb-6 grow text-sm leading-relaxed text-ink-soft">{project.description}</p>
+          <div className="relative z-10 mb-6 flex flex-wrap gap-2">
+            {project.tags.map((tag) => <span key={tag} className="chip px-3 py-1 text-xs">{tag}</span>)}
+          </div>
+          <a href={project.href} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className="btn-solid relative z-10 self-start py-2.5 text-sm">View Project →</a>
+        </div>
+        <div className="project-face project-face-back glow-card p-8">
+          <span className="project-flip-affordance" aria-hidden="true"><Rotate3D size={16} /></span>
+          <p className="eyebrow mb-4">// deployment pipeline</p>
+          <h3 className="mb-6 text-xl text-ink">Ship it cleanly</h3>
+          <div className="pipeline" aria-label="Build, Test, Deploy pipeline">
+            {["Build", "Test", "Deploy"].map((stage) => <span key={stage} className="pipeline-stage">{stage}</span>)}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {project.tags.map((tag) => <span key={tag} className="chip px-3 py-1 text-xs">{tag}</span>)}
+          </div>
+          <p className="mt-auto pt-8 font-mono text-xs text-ink-dim">click to return</p>
+        </div>
+      </div>
+    </motion.article>
   );
 }
 
@@ -180,6 +252,7 @@ function Portfolio() {
   return (
     <div className="relative min-h-screen">
       <SkyBackdrop />
+      <CursorGlow />
 
       <div className="relative z-10">
         <nav className="sticky top-4 z-50 flex justify-center px-4">
@@ -210,7 +283,10 @@ function Portfolio() {
                 }}
                 aria-hidden="true"
               />
-              <div className="relative h-full w-full rounded-full bg-background p-1.5">
+              <div className="photo-frame-desktop">
+                <PhotoFrame3D photoUrl={photoUrl} />
+              </div>
+              <div className="photo-frame-mobile relative h-full w-full rounded-full bg-background p-1.5">
                 <img
                   src={photoUrl}
                   alt="Portrait of Jatin Thakur"
@@ -357,7 +433,15 @@ function Portfolio() {
                     : "var(--primary)";
 
                 return (
-                <div key={card.line} onMouseMove={spotlight} className="glow-card p-8">
+                <motion.div
+                  key={card.line}
+                  initial={{ opacity: 0, rotateX: 10, y: 18 }}
+                  whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                  onMouseMove={spotlight}
+                  className="glow-card p-8"
+                >
                   <div
                     className="mb-4 flex h-9 w-9 items-center justify-center rounded-[0.6rem] text-base"
                     style={{
@@ -379,7 +463,7 @@ function Portfolio() {
                       ))}
                     </div>
                   ) : null}
-                </div>
+                </motion.div>
                 );
               })}
             </div>
@@ -405,8 +489,12 @@ function Portfolio() {
 
               <div className="space-y-7 sm:space-y-10">
                 {EDUCATION.map((item, index) => (
-                  <article
+                  <motion.article
                     key={item.title}
+                    initial={{ opacity: 0, rotateX: 10, y: 18 }}
+                    whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
                     onMouseMove={spotlight}
                     className={`relative flex items-start gap-5 pl-11 sm:gap-0 sm:pl-0 ${
                       index % 2 === 0 ? "sm:pr-[calc(50%+2.5rem)]" : "sm:pl-[calc(50%+2.5rem)]"
@@ -449,7 +537,7 @@ function Portfolio() {
                         {item.result}
                       </p>
                     </div>
-                  </article>
+                  </motion.article>
                 ))}
               </div>
             </div>
@@ -464,77 +552,7 @@ function Portfolio() {
             />
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {PROJECTS.map((project) => (
-                <article
-                  key={project.title}
-                  onMouseMove={spotlight}
-                  className="glow-card group flex flex-col p-8"
-                >
-                  <span
-                    className="absolute inset-x-0 top-0 h-[3px]"
-                    style={{
-                      background: `linear-gradient(90deg, ${project.accent}, transparent 85%)`,
-                    }}
-                  />
-                  <span
-                    className="pointer-events-none absolute -top-8 -right-8 h-48 w-48 opacity-50 transition-all duration-500 group-hover:scale-110 group-hover:opacity-90"
-                    style={{
-                      background: `radial-gradient(circle at 70% 30%, ${project.accent}, transparent 58%)`,
-                      maskImage:
-                        "radial-gradient(circle at 70% 30%, black 0%, transparent 72%)",
-                      WebkitMaskImage:
-                        "radial-gradient(circle at 70% 30%, black 0%, transparent 72%)",
-                    }}
-                  />
-                  <div
-                    className="relative z-10 mb-5 flex h-12 w-12 items-center justify-center rounded-[0.85rem] border"
-                    style={{
-                      background: `color-mix(in oklab, ${project.accent} 14%, transparent)`,
-                      borderColor: `color-mix(in oklab, ${project.accent} 32%, transparent)`,
-                    }}
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke={project.accent}
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-5.5 w-5.5"
-                      aria-hidden="true"
-                    >
-                      {project.icon}
-                    </svg>
-                  </div>
-                  <p
-                    className="relative z-10 mb-2.5 font-mono text-[0.72rem] tracking-wider"
-                    style={{ color: project.accent }}
-                  >
-                    {project.kicker}
-                  </p>
-                  <h3 className="relative z-10 mb-3 text-xl text-ink">
-                    {project.title}
-                  </h3>
-                  <p className="relative z-10 mb-6 grow text-sm leading-relaxed text-ink-soft">
-                    {project.description}
-                  </p>
-                  <div className="relative z-10 mb-6 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="chip px-3 py-1 text-xs">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <a
-                    href={project.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-solid relative z-10 self-start py-2.5 text-sm"
-                  >
-                    View Project →
-                  </a>
-                </article>
-              ))}
+              {PROJECTS.map((project, index) => <ProjectCard key={project.title} project={project} index={index} />)}
             </div>
           </section>
 
@@ -542,9 +560,18 @@ function Portfolio() {
           <section id="skills" className="pt-24 pb-10">
             <SectionHeading eyebrow="04 — toolbox" title="My Skills" />
 
-            <div className="grid gap-11 sm:grid-cols-2 sm:gap-x-14">
+            <div className="skills-sphere-desktop">
+              <SkillsSphere groups={SKILL_GROUPS} />
+            </div>
+            <div className="skills-grid-mobile grid gap-11 sm:grid-cols-2 sm:gap-x-14">
               {SKILL_GROUPS.map((group) => (
-                <div key={group.title}>
+                <motion.div
+                  key={group.title}
+                  initial={{ opacity: 0, rotateX: 10, y: 18 }}
+                  whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                >
                   <h4 className="mb-4 text-sm font-semibold tracking-[0.08em] text-ink-dim uppercase">
                     {group.title}
                   </h4>
@@ -558,7 +585,7 @@ function Portfolio() {
                       </span>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 

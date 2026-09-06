@@ -60,6 +60,7 @@ export const PROJECTS = [
     title: "ChatApp on Kubernetes",
     description:
       "A real-time chat app containerised with Docker and deployed on Kubernetes to practice orchestration and scaling.",
+    tags: ["Docker", "Kubernetes", "Jenkins", "AWS"],
     href: "https://github.com/jatinthakur011/chatapp-k8s",
     icon: (
       <>
@@ -74,6 +75,7 @@ export const PROJECTS = [
     title: "HealthHub",
     description:
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
+    tags: ["React", "Node.js", "MongoDB"],
     href: "https://github.com/jatinthakur011/HealthHub",
     icon: <path d="M2 12h4l2-6 4 12 2-8 2 4h6" />,
   },
@@ -83,6 +85,7 @@ export const PROJECTS = [
     title: "Employee Management System",
     description:
       "A web app for HR operations — secure auth, attendance, salary, task assignment, leave management, and real-time communication.",
+    tags: ["React", "Node.js", "MongoDB", "JWT"],
     href: "https://github.com/jatinthakur011/employee_management_system",
     icon: (
       <>
@@ -134,11 +137,13 @@ export const CONTACTS = [
     glyph: "✉",
     label: "jatuthakur170@gmail.com",
     href: "mailto:jatuthakur170@gmail.com",
+    copyValue: "jatuthakur170@gmail.com",
   },
   {
     glyph: <Phone size={15} strokeWidth={1.8} />,
     label: "+91 8091259662",
     href: "tel:+918091259662",
+    copyValue: "+91 8091259662",
   },
   {
     glyph: "in",

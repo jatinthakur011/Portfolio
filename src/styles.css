@@ -379,6 +379,11 @@
   to { transform: translateX(-50%); }
 }
 
+@keyframes cursor-blink {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+
 @keyframes ring-spin-rev {
   to { transform: rotate(-360deg); }
 }
@@ -522,6 +527,118 @@
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+
+  &:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@utility tech-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+}
+
+@utility terminal-cursor {
+  display: inline-block;
+  margin-left: 0.2rem;
+  color: var(--signal);
+  animation: cursor-blink 1s steps(1, end) infinite;
+}
+
+@utility contact-card {
+  min-width: 0;
+}
+
+@utility copy-contact-button {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  color: var(--ink-dim);
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
+
+  .contact-card:hover &,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  &:hover {
+    color: var(--primary);
+    background: color-mix(in oklab, var(--primary) 12%, transparent);
+  }
+}
+
+@utility copy-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.45rem);
+  pointer-events: none;
+  border: 1px solid color-mix(in oklab, var(--signal) 28%, transparent);
+  border-radius: 0.45rem;
+  padding: 0.3rem 0.45rem;
+  background: var(--background);
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  .copy-contact-button:focus-visible &,
+  .copy-contact-button:hover & {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 40;
+  display: inline-flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in oklab, var(--primary) 35%, transparent);
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--background) 82%, transparent);
+  color: var(--primary);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.75rem);
+  backdrop-filter: blur(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+
+  &:hover {
+    background: color-mix(in oklab, var(--primary) 14%, var(--background));
+  }
+}
+
+@utility back-to-top-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 @utility btn-solid {

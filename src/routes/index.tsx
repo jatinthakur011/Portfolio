@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ArrowUp, Copy } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 
@@ -99,6 +100,8 @@ function spotlight(e: React.MouseEvent<HTMLElement>) {
 }
 
 const MARQUEE_TECH = [
+  "Linux",
+  "Git",
   "React",
   "Node.js",
   "TypeScript",
@@ -107,11 +110,32 @@ const MARQUEE_TECH = [
   "Terraform",
   "Jenkins",
   "AWS",
-  "Ansible",
-  "MongoDB",
-  "Linux",
-  "Git",
 ];
+
+function TechIcon({ name }: { name: string }) {
+  const common = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.7,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true" {...common}>
+      {name === "Linux" ? <><path d="M12 3c-2.2 0-3.2 2.4-3.2 5.2 0 2.1-2.3 3.4-2.3 6.3 0 2.8 2.1 4.5 5.5 4.5s5.5-1.7 5.5-4.5c0-2.9-2.3-4.2-2.3-6.3C15.2 5.4 14.2 3 12 3Z" /><path d="M8.2 18.4 6 21h4l2-2 2 2h4l-2.2-2.6M9.5 9h.01M14.5 9h.01" /></> : null}
+      {name === "Git" ? <><path d="m20.5 10.5-7-7a2.1 2.1 0 0 0-3 0l-1.7 1.7 2.8 2.8a2.4 2.4 0 0 1 3 3l2.8 2.8 3.1-3.1a2.1 2.1 0 0 0 0-3Z" /><path d="m8.8 8.8-3.1 3.1a2.1 2.1 0 0 0 0 3l7 7a2.1 2.1 0 0 0 3 0l1.7-1.7-2.8-2.8a2.4 2.4 0 0 1-3-3l-2.8-2.8Z" /></> : null}
+      {name === "React" ? <><ellipse cx="12" cy="12" rx="9" ry="3.6" /><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)" /><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(120 12 12)" /><circle cx="12" cy="12" r="1.2" fill="currentColor" /></> : null}
+      {name === "Node.js" ? <><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" /><path d="M8 12.2c0-1.2.8-1.9 2-1.9h1.7c1.2 0 2 .7 2 1.9s-.8 1.9-2 1.9H10c-1.2 0-2 .7-2 1.9s.8 1.9 2 1.9h2" /></> : null}
+      {name === "TypeScript" ? <><rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor" stroke="none" /><path d="M7 11h6M10 11v7M15 14.5c0-1 1-1.5 2-1.5s2 .5 2 1.5-1 1.5-2 1.5-2 .5-2 1.5 1 1.5 2 1.5 2-.5 2-1.5" stroke="var(--background)" /></> : null}
+      {name === "Docker" ? <><path d="M3 13h14.5c2.2 0 3.3-1.2 3.8-2.5-1.4-.7-2.8-.7-4.1-.3-.4-2-1.6-3.2-3.5-3.6-.4.8-.5 1.7-.3 2.6H5.5v3.8Z" /><path d="M5 7h2v2H5zM8 7h2v2H8zM11 7h2v2h-2zM8 4h2v2H8zM11 4h2v2h-2z" /></> : null}
+      {name === "Kubernetes" ? <><path d="m12 2 8.7 5v10L12 22l-8.7-5V7L12 2Z" /><path d="m12 6 1.5 3.7 4 .3-3.1 2.5 1 3.9-3.4-2.1-3.4 2.1 1-3.9-3.1-2.5 4-.3L12 6Z" /></> : null}
+      {name === "Terraform" ? <><path d="m4 4 6 3.4v6.8L4 10.8V4ZM10 14l6 3.4v-6.8l-6-3.4V14ZM16 4l4 2.3v6.8l-4-2.3V4Z" /></> : null}
+      {name === "Jenkins" ? <><circle cx="12" cy="12" r="8.5" /><path d="M8.5 10.5c1.2-1.8 5.8-1.8 7 0M9 15c1.8 1.4 4.2 1.4 6 0M9 8h.01M15 8h.01" /></> : null}
+      {name === "AWS" ? <><path d="M4 15.5c4 2.5 8.8 2.6 15.5-.5" /><path d="M17 12.5c.6 1.1 1.1 2.3 1.2 3.7M4 12c1.8-4.4 5.1-6.5 9.1-6.5 2.2 0 4.2.7 5.9 2.1" /></> : null}
+    </svg>
+  );
+}
 
 function SectionHeading({
   title,
@@ -137,6 +161,21 @@ function SectionHeading({
 
 function Portfolio() {
   const active = useActiveSection();
+  const [copiedContact, setCopiedContact] = useState<string | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > window.innerHeight * 0.7);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  async function copyContact(value: string) {
+    await navigator.clipboard.writeText(value);
+    setCopiedContact(value);
+    window.setTimeout(() => setCopiedContact(null), 1400);
+  }
 
   return (
     <div className="relative min-h-screen">
@@ -223,6 +262,7 @@ function Portfolio() {
               style={{ animationDelay: "0.2s" }}
             >
               <span style={{ color: "var(--signal)" }}>$</span> whoami
+              <span className="terminal-cursor" aria-hidden="true">▍</span>
               <br />
               <span style={{ color: "var(--primary)" }}>jatin</span> — builds web
               apps, then ships and automates them.
@@ -274,8 +314,9 @@ function Portfolio() {
                 {[...MARQUEE_TECH, ...MARQUEE_TECH].map((t, i) => (
                   <span
                     key={`${t}-${i}`}
-                    className="font-mono text-sm whitespace-nowrap text-ink-dim"
+                    className="tech-marquee-item"
                   >
+                    <TechIcon name={t} />
                     {t}
                   </span>
                 ))}
@@ -308,14 +349,20 @@ function Portfolio() {
             </p>
 
             <div className="grid gap-5 sm:grid-cols-2">
-              {ABOUT_CARDS.map((card) => (
+              {ABOUT_CARDS.map((card, index) => {
+                const cardAccent = index === 1
+                  ? "var(--signal)"
+                  : index === 2
+                    ? "oklch(0.82 0.15 85)"
+                    : "var(--primary)";
+
+                return (
                 <div key={card.line} onMouseMove={spotlight} className="glow-card p-8">
                   <div
                     className="mb-4 flex h-9 w-9 items-center justify-center rounded-[0.6rem] text-base"
                     style={{
-                      background:
-                        "color-mix(in oklab, var(--primary) 14%, transparent)",
-                      color: "var(--primary)",
+                      background: `color-mix(in oklab, ${cardAccent} 14%, transparent)`,
+                      color: cardAccent,
                     }}
                   >
                     {card.glyph}
@@ -333,7 +380,8 @@ function Portfolio() {
                     </div>
                   ) : null}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
@@ -470,6 +518,13 @@ function Portfolio() {
                   <p className="relative z-10 mb-6 grow text-sm leading-relaxed text-ink-soft">
                     {project.description}
                   </p>
+                  <div className="relative z-10 mb-6 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="chip px-3 py-1 text-xs">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   <a
                     href={project.href}
                     target="_blank"
@@ -533,26 +588,43 @@ function Portfolio() {
 
               <div className="grid gap-3.5 sm:grid-cols-2">
                 {CONTACTS.map((contact) => (
-                  <a
+                  <div
                     key={contact.href}
-                    href={contact.href}
-                    target={contact.href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer"
                     onMouseMove={spotlight}
-                    className="glow-card flex items-center gap-3 px-4 py-3.5 text-sm break-all text-ink-soft hover:text-ink"
+                    className="contact-card glow-card group relative"
                   >
-                    <span
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm"
-                      style={{
-                        background:
-                          "color-mix(in oklab, var(--primary) 14%, transparent)",
-                        color: "var(--primary)",
-                      }}
+                    <a
+                      href={contact.href}
+                      target={contact.href.startsWith("http") ? "_blank" : undefined}
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-4 py-3.5 pr-12 text-sm break-all text-ink-soft hover:text-ink"
                     >
-                      {contact.glyph}
-                    </span>
-                    {contact.label}
-                  </a>
+                      <span
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm"
+                        style={{
+                          background:
+                            "color-mix(in oklab, var(--primary) 14%, transparent)",
+                          color: "var(--primary)",
+                        }}
+                      >
+                        {contact.glyph}
+                      </span>
+                      {contact.label}
+                    </a>
+                    {contact.copyValue ? (
+                      <button
+                        type="button"
+                        aria-label={`Copy ${contact.label}`}
+                        className="copy-contact-button"
+                        onClick={() => copyContact(contact.copyValue)}
+                      >
+                        <Copy size={14} />
+                        <span className="copy-tooltip">
+                          {copiedContact === contact.copyValue ? "Copied!" : "Copy"}
+                        </span>
+                      </button>
+                    ) : null}
+                  </div>
                 ))}
               </div>
 
@@ -578,6 +650,14 @@ function Portfolio() {
           </footer>
         </div>
       </div>
+      <button
+        type="button"
+        aria-label="Back to top"
+        className={`back-to-top ${showBackToTop ? "back-to-top-visible" : ""}`}
+        onClick={() => document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })}
+      >
+        <ArrowUp size={17} />
+      </button>
     </div>
   );
 }

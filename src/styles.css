@@ -930,7 +930,6 @@
 }
 
 @media (max-width: 767px), (prefers-reduced-motion: reduce) {
-  .mission-control-scene,
   .cursor-glow,
   .photo-frame-desktop,
   .skills-sphere-desktop {
@@ -950,10 +949,6 @@
     animation: none;
   }
 
-  .sky-field-fallback {
-    display: block;
-  }
-
   .photo-frame-mobile,
   .skills-grid-mobile {
     display: block;
@@ -965,6 +960,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sky-field-fallback {
+    display: block;
+  }
+
+  .mission-control-scene {
+    display: none;
+  }
+
   .sky-field-fallback .star-dot,
   .sky-field-fallback .meteor-streak,
   .sky-parallax-layer {

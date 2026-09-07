@@ -1,51 +1,47 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Trail } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-const DESKTOP_STAR_COUNT = 820;
-const MOBILE_STAR_COUNT = 240;
-const SHOOTING_STAR_COUNT = 4;
+const DESKTOP_GALAXY_COUNT = 12_000;
+const MOBILE_GALAXY_COUNT = 2_600;
+const DUST_COUNT = 420;
 
-type StarLayerProps = {
-  count: number;
-  depth: [number, number];
-  size: [number, number];
-  opacity: [number, number];
-  parallax: number;
-  color: string;
-  drift: number;
-};
-
-const starVertexShader = `
+const particleVertexShader = `
   attribute float aSize;
   attribute float aAlpha;
-  attribute vec3 color;
+  attribute vec3 aColor;
   varying float vAlpha;
   varying vec3 vColor;
 
   void main() {
-    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-    vec4 viewPosition = viewMatrix * modelPosition;
+    vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
     gl_Position = projectionMatrix * viewPosition;
-    gl_PointSize = aSize * (72.0 / max(1.0, -viewPosition.z));
+    gl_PointSize = aSize * (92.0 / max(1.0, -viewPosition.z));
     vAlpha = aAlpha;
-    vColor = color;
+    vColor = aColor;
   }
 `;
 
-const starFragmentShader = `
+const particleFragmentShader = `
   varying float vAlpha;
   varying vec3 vColor;
 
   void main() {
     float distanceFromCenter = distance(gl_PointCoord, vec2(0.5));
-    float core = 1.0 - smoothstep(0.05, 0.42, distanceFromCenter);
-    float glow = 1.0 - smoothstep(0.18, 0.5, distanceFromCenter);
-    if (glow <= 0.01) discard;
-    gl_FragColor = vec4(vColor, vAlpha * (core * 0.8 + glow * 0.2));
+    float softDisc = 1.0 - smoothstep(0.08, 0.5, distanceFromCenter);
+    float hotCore = 1.0 - smoothstep(0.0, 0.23, distanceFromCenter);
+    if (softDisc <= 0.01) discard;
+    gl_FragColor = vec4(vColor, vAlpha * (softDisc * 0.62 + hotCore * 0.38));
   }
 `;
+
+type ParticleData = {
+  positions: Float32Array;
+  sizes: Float32Array;
+  alphas: Float32Array;
+  colors: Float32Array;
+};
 
 function useResponsiveMotionMode() {
   const [mode, setMode] = useState({ mobile: false, reduced: false });
@@ -53,8 +49,7 @@ function useResponsiveMotionMode() {
   useEffect(() => {
     const mobileQuery = window.matchMedia("(max-width: 767px)");
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () =>
-      setMode({ mobile: mobileQuery.matches, reduced: reducedQuery.matches });
+    const update = () => setMode({ mobile: mobileQuery.matches, reduced: reducedQuery.matches });
 
     update();
     mobileQuery.addEventListener("change", update);
@@ -68,163 +63,145 @@ function useResponsiveMotionMode() {
   return mode;
 }
 
-function StarLayer({
-  count,
-  depth,
-  size,
-  opacity,
-  parallax,
-  color,
-  drift,
-}: StarLayerProps) {
-  const group = useRef<THREE.Group>(null);
-  const points = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
-    const alphas = new Float32Array(count);
-    const colorValue = new THREE.Color(color);
-    const colors = new Float32Array(count * 3);
+function makeParticleData(
+  count: number,
+  createPosition: () => THREE.Vector3,
+  sizeRange: [number, number],
+  alphaRange: [number, number],
+  colorAt: () => THREE.Color,
+): ParticleData {
+  const positions = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+  const alphas = new Float32Array(count);
+  const colors = new Float32Array(count * 3);
 
-    for (let index = 0; index < count; index += 1) {
-      positions[index * 3] = (Math.random() - 0.5) * 22;
-      positions[index * 3 + 1] = (Math.random() - 0.5) * 14;
-      positions[index * 3 + 2] = THREE.MathUtils.lerp(depth[0], depth[1], Math.random());
-      sizes[index] = THREE.MathUtils.lerp(size[0], size[1], Math.random());
-      alphas[index] = THREE.MathUtils.lerp(opacity[0], opacity[1], Math.random());
-      colors[index * 3] = colorValue.r;
-      colors[index * 3 + 1] = colorValue.g;
-      colors[index * 3 + 2] = colorValue.b;
-    }
+  for (let index = 0; index < count; index += 1) {
+    const position = createPosition();
+    const color = colorAt();
+    positions[index * 3] = position.x;
+    positions[index * 3 + 1] = position.y;
+    positions[index * 3 + 2] = position.z;
+    sizes[index] = THREE.MathUtils.lerp(sizeRange[0], sizeRange[1], Math.random());
+    alphas[index] = THREE.MathUtils.lerp(alphaRange[0], alphaRange[1], Math.random());
+    colors[index * 3] = color.r;
+    colors[index * 3 + 1] = color.g;
+    colors[index * 3 + 2] = color.b;
+  }
 
-    return { positions, sizes, alphas, colors };
-  }, [color, count, depth, opacity, size]);
-
-  useFrame(({ mouse }, delta) => {
-    if (!group.current) return;
-    group.current.position.x = THREE.MathUtils.lerp(
-      group.current.position.x,
-      mouse.x * parallax * 0.55,
-      0.025,
-    );
-    group.current.position.y = THREE.MathUtils.lerp(
-      group.current.position.y,
-      mouse.y * parallax * 0.35,
-      0.025,
-    );
-    group.current.rotation.y += delta * drift;
-    group.current.rotation.x += delta * drift * 0.22;
-    group.current.position.y -= delta * drift * 0.04;
-    if (group.current.position.y < -0.35) group.current.position.y = 0.35;
-  });
-
-  return (
-    <group ref={group}>
-      <points frustumCulled={false}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={count} array={points.positions} itemSize={3} />
-          <bufferAttribute attach="attributes-aSize" count={count} array={points.sizes} itemSize={1} />
-          <bufferAttribute attach="attributes-aAlpha" count={count} array={points.alphas} itemSize={1} />
-          <bufferAttribute attach="attributes-color" count={count} array={points.colors} itemSize={3} />
-        </bufferGeometry>
-        <shaderMaterial
-          vertexColors
-          vertexShader={starVertexShader}
-          fragmentShader={starFragmentShader}
-          transparent
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </points>
-    </group>
-  );
+  return { positions, sizes, alphas, colors };
 }
 
-function Nebula() {
-  const material = useRef<THREE.ShaderMaterial>(null);
-
-  useFrame((_, delta) => {
-    if (material.current) material.current.uniforms.uTime.value += delta * 0.08;
-  });
+function ParticlePoints({ data }: { data: ParticleData }) {
+  const count = data.sizes.length;
 
   return (
-    <mesh position={[0, 0, -12]} scale={[1.2, 1.2, 1]}>
-      <planeGeometry args={[22, 14]} />
+    <points frustumCulled={false}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" count={count} array={data.positions} itemSize={3} />
+        <bufferAttribute attach="attributes-aSize" count={count} array={data.sizes} itemSize={1} />
+        <bufferAttribute attach="attributes-aAlpha" count={count} array={data.alphas} itemSize={1} />
+        <bufferAttribute attach="attributes-aColor" count={count} array={data.colors} itemSize={3} />
+      </bufferGeometry>
       <shaderMaterial
-        ref={material}
+        vertexShader={particleVertexShader}
+        fragmentShader={particleFragmentShader}
         transparent
         depthWrite={false}
-        uniforms={{ uTime: { value: 0 } }}
-        vertexShader={`
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `}
-        fragmentShader={`
-          uniform float uTime;
-          varying vec2 vUv;
-          void main() {
-            vec2 uv = vUv - 0.5;
-            float wave = sin(uv.x * 6.0 + uTime) * 0.035 + cos(uv.y * 7.0 - uTime * 0.7) * 0.035;
-            float blue = exp(-length((uv + vec2(0.22, -0.08) + wave) * vec2(1.0, 1.7)) * 4.0);
-            float teal = exp(-length((uv + vec2(-0.25, 0.16) - wave) * vec2(1.2, 1.5)) * 4.4);
-            float purple = exp(-length((uv + vec2(0.06, 0.26)) * vec2(1.4, 1.1)) * 5.0);
-            vec3 color = vec3(0.18, 0.42, 1.0) * blue + vec3(0.1, 0.9, 0.68) * teal + vec3(0.48, 0.18, 0.9) * purple;
-            float alpha = min(0.17, (blue + teal + purple) * 0.08);
-            gl_FragColor = vec4(color, alpha);
-          }
-        `}
+        blending={THREE.AdditiveBlending}
       />
-    </mesh>
+    </points>
   );
 }
 
-function ShootingStar({ index }: { index: number }) {
+function Galaxy({ mobile }: { mobile: boolean }) {
   const group = useRef<THREE.Group>(null);
-  const core = useRef<THREE.Mesh>(null);
-  const period = 8.5 + index * 0.85;
-  const offset = index * 2.45;
+  const count = mobile ? MOBILE_GALAXY_COUNT : DESKTOP_GALAXY_COUNT;
+  const data = useMemo(
+    () => makeParticleData(
+      count,
+      () => {
+        const radius = Math.pow(Math.random(), 0.62) * 5.7;
+        const arm = Math.floor(Math.random() * 5) * ((Math.PI * 2) / 5);
+        const angle = arm + radius * 1.55 + (Math.random() - 0.5) * (0.34 + radius * 0.09);
+        const thickness = (Math.random() - 0.5) * (0.12 + radius * 0.08);
+        return new THREE.Vector3(Math.cos(angle) * radius, thickness, Math.sin(angle) * radius * 0.56);
+      },
+      [0.025, 0.095],
+      [0.24, 0.9],
+      () => {
+        const radiusRatio = Math.random();
+        const color = new THREE.Color("#fff4cc");
+        color.lerp(new THREE.Color("#806dff"), radiusRatio);
+        color.lerp(new THREE.Color("#75bfff"), radiusRatio * 0.45);
+        return color;
+      },
+    ),
+    [count],
+  );
 
-  useFrame(({ clock }) => {
-    if (!group.current || !core.current) return;
-    const phase = ((clock.getElapsedTime() + offset) % period) / period;
-    const active = phase < 0.24;
-    group.current.visible = active;
-    if (!active) return;
-
-    const progress = phase / 0.24;
-    const eased = progress * progress * (3 - 2 * progress);
-    group.current.position.set(
-      THREE.MathUtils.lerp(-9, 9, eased),
-      THREE.MathUtils.lerp(5.8, -4.8, eased),
-      -2.5 + index * 0.4,
-    );
-    (core.current.material as THREE.MeshBasicMaterial).opacity = 1 - progress;
+  useFrame((state, delta) => {
+    if (!group.current) return;
+    group.current.rotation.y += delta * 0.018;
+    group.current.rotation.z += delta * 0.002;
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, 0.28 + state.mouse.y * 0.035, 0.018);
   });
 
   return (
-    <group ref={group} visible={false}>
-      <Trail width={0.16} length={7} color={index % 2 ? "#8ff4d0" : "#8eb7ff"} attenuation={(value) => value * value}>
-        <mesh ref={core}>
-          <sphereGeometry args={[0.07, 8, 8]} />
-          <meshBasicMaterial color={index % 2 ? "#c7ffef" : "#d8e5ff"} transparent opacity={1} />
-        </mesh>
-      </Trail>
+    <group ref={group} rotation={[0.28, -0.35, 0]} position={[0, 0.15, -2.3]}>
+      <ParticlePoints data={data} />
+      <mesh>
+        <sphereGeometry args={[0.22, 16, 16]} />
+        <meshBasicMaterial color="#fff2c2" toneMapped={false} />
+      </mesh>
     </group>
   );
 }
 
-function StarField({ mobile }: { mobile: boolean }) {
-  const count = mobile ? MOBILE_STAR_COUNT : DESKTOP_STAR_COUNT;
+function ForegroundDust({ mobile }: { mobile: boolean }) {
+  const group = useRef<THREE.Group>(null);
+  const dust = useMemo(
+    () => makeParticleData(
+      mobile ? Math.round(DUST_COUNT * 0.55) : DUST_COUNT,
+      () => new THREE.Vector3((Math.random() - 0.5) * 13, (Math.random() - 0.5) * 8, Math.random() * 4 - 0.5),
+      [0.06, 0.16],
+      [0.16, 0.55],
+      () => new THREE.Color(Math.random() > 0.6 ? "#c5b5ff" : "#8fcfff"),
+    ),
+    [mobile],
+  );
 
+  useFrame((state, delta) => {
+    if (!group.current) return;
+    group.current.rotation.y -= delta * 0.008;
+    group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, state.mouse.x * (mobile ? 0 : 0.18), 0.025);
+    group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, state.mouse.y * (mobile ? 0 : 0.12), 0.025);
+  });
+
+  return <group ref={group}><ParticlePoints data={dust} /></group>;
+}
+
+function CameraDrift({ mobile }: { mobile: boolean }) {
+  const { camera } = useThree();
+
+  useFrame(({ clock, mouse }) => {
+    const time = clock.getElapsedTime();
+    const parallax = mobile ? 0 : 0.16;
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, Math.sin(time * 0.08) * 0.16 + mouse.x * parallax, 0.012);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, Math.cos(time * 0.065) * 0.1 + mouse.y * parallax * 0.7, 0.012);
+    camera.lookAt(0, 0, -2.4);
+  });
+
+  return null;
+}
+
+function GalaxyScene({ mobile }: { mobile: boolean }) {
   return (
     <>
-      <Nebula />
-      <StarLayer count={Math.round(count * 0.42)} depth={[-20, -10]} size={[0.012, 0.04]} opacity={[0.16, 0.38]} parallax={0.18} color="#9cb7ff" drift={0.002} />
-      <StarLayer count={Math.round(count * 0.38)} depth={[-10, -3]} size={[0.025, 0.08]} opacity={[0.28, 0.62]} parallax={0.45} color="#b9d2ff" drift={0.0035} />
-      <StarLayer count={Math.round(count * 0.2)} depth={[-3, 2]} size={[0.05, 0.17]} opacity={[0.5, 0.95]} parallax={0.85} color="#d8fff5" drift={0.005} />
-      {!mobile && Array.from({ length: SHOOTING_STAR_COUNT }, (_, index) => <ShootingStar key={index} index={index} />)}
+      <color attach="background" args={["#030514"]} />
+      <Galaxy mobile={mobile} />
+      <ForegroundDust mobile={mobile} />
+      {!mobile ? <EffectComposer><Bloom luminanceThreshold={0.24} mipmapBlur intensity={1.2} radius={0.72} /></EffectComposer> : null}
+      <CameraDrift mobile={mobile} />
     </>
   );
 }
@@ -232,14 +209,17 @@ function StarField({ mobile }: { mobile: boolean }) {
 export function MissionControlScene() {
   const { mobile, reduced } = useResponsiveMotionMode();
 
-  if (mobile || reduced) return null;
+  if (reduced) return null;
 
   return (
     <div className="mission-control-scene" aria-hidden="true">
-      <Canvas camera={{ position: [0, 0, 8], fov: 55 }} dpr={[1, 1.25]} gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}>
-        <StarField mobile={mobile} />
+      <Canvas
+        camera={{ position: [0, 0.1, 8.5], fov: 53 }}
+        dpr={mobile ? [1, 1] : [1, 1.35]}
+        gl={{ alpha: false, antialias: false, powerPreference: "high-performance" }}
+      >
+        <GalaxyScene mobile={mobile} />
       </Canvas>
-      <div className="mission-horizon" />
     </div>
   );
 }

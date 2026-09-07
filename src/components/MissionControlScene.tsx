@@ -32,7 +32,12 @@ const particleFragmentShader = `
   }
 `;
 
-type ParticleData = { positions: Float32Array; sizes: Float32Array; alphas: Float32Array; colors: Float32Array };
+type ParticleData = {
+  positions: Float32Array;
+  sizes: Float32Array;
+  alphas: Float32Array;
+  colors: Float32Array;
+};
 
 function useMotionMode() {
   const [mode, setMode] = useState({ mobile: false, reduced: false });

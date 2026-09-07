@@ -119,105 +119,20 @@
   }
 }
 
-/* ---------- Animated mesh background ---------- */
+/* ---------- Sky field ---------- */
 
-.mesh-background {
+.mission-control-scene {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  isolation: isolate;
-  background: #050810;
+  background: transparent;
 }
 
-.mesh-background::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.035;
-  background-image: linear-gradient(oklch(1 0 0 / 0.65) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(1 0 0 / 0.65) 1px, transparent 1px);
-  background-size: 42px 42px;
-}
+.mission-control-canvas { display: block; width: 100% !important; height: 100% !important; }
 
-.mesh-orb {
-  position: absolute;
-  width: min(48vw, 720px);
-  height: min(48vw, 720px);
-  border-radius: 50%;
-  filter: blur(96px);
-  opacity: 0.2;
-  will-change: transform;
-}
-
-.mesh-orb-blue {
-  top: -18%;
-  left: -12%;
-  background: var(--primary);
-  animation: mesh-drift-blue 21s ease-in-out infinite;
-}
-
-.mesh-orb-teal {
-  top: 18%;
-  right: -18%;
-  background: var(--signal);
-  opacity: 0.17;
-  animation: mesh-drift-teal 18s ease-in-out infinite;
-}
-
-.mesh-orb-purple {
-  bottom: -30%;
-  left: 20%;
-  background: oklch(0.58 0.2 305);
-  opacity: 0.2;
-  animation: mesh-drift-purple 24s ease-in-out infinite;
-}
-
-.mesh-orb-cyan {
-  top: 42%;
-  left: 42%;
-  width: min(34vw, 520px);
-  height: min(34vw, 520px);
-  background: oklch(0.68 0.17 215);
-  opacity: 0.14;
-  animation: mesh-drift-cyan 19s ease-in-out infinite;
-}
-
-.mesh-orb-indigo {
-  right: 22%;
-  bottom: -24%;
-  width: min(38vw, 580px);
-  height: min(38vw, 580px);
-  background: oklch(0.52 0.2 275);
-  opacity: 0.16;
-  animation: mesh-drift-indigo 22s ease-in-out infinite;
-}
-
-@keyframes mesh-drift-blue {
-  0%, 100% { transform: translate(calc(var(--mx, 0) * -16px), calc(var(--my, 0) * -12px)) scale(1); }
-  50% { transform: translate(calc(var(--mx, 0) * 16px), calc(var(--my, 0) * 12px)) scale(1.12); }
-}
-
-@keyframes mesh-drift-teal {
-  0%, 100% { transform: translate(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 18px)) scale(1.08); }
-  50% { transform: translate(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -10px)) scale(0.94); }
-}
-
-@keyframes mesh-drift-purple {
-  0%, 100% { transform: translate(calc(var(--mx, 0) * -12px), calc(var(--my, 0) * 14px)) scale(0.96); }
-  50% { transform: translate(calc(var(--mx, 0) * 18px), calc(var(--my, 0) * -18px)) scale(1.1); }
-}
-
-@keyframes mesh-drift-cyan {
-  0%, 100% { transform: translate(calc(var(--mx, 0) * 18px), calc(var(--my, 0) * -14px)) scale(1); }
-  50% { transform: translate(calc(var(--mx, 0) * -14px), calc(var(--my, 0) * 16px)) scale(1.16); }
-}
-
-@keyframes mesh-drift-indigo {
-  0%, 100% { transform: translate(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -14px)) scale(1.08); }
-  50% { transform: translate(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 16px)) scale(0.95); }
-}
+.sky-field-fallback { display: none; }
 
 @keyframes signal-pulse {
   0% {
@@ -255,11 +170,6 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   backdrop-filter: blur(16px);
-}
-
-.portfolio-nav {
-  position: relative;
-  z-index: 50;
 }
 
 @utility dock-link {
@@ -918,7 +828,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mesh-orb {
-    animation-play-state: paused;
-  }
-}
+  .mission-control-scene { display: none; }
+  .sky-field-fallback { display: block; }

@@ -963,3 +963,20 @@
     display: grid;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-field-fallback .star-dot,
+  .sky-field-fallback .meteor-streak,
+  .sky-parallax-layer {
+    animation: none;
+    transform: none;
+  }
+
+  .sky-field-fallback .star-dot {
+    opacity: 0.55;
+  }
+
+  .sky-field-fallback .meteor-streak {
+    display: none;
+  }
+}

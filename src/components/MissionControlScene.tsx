@@ -58,6 +58,7 @@ function createEarthTexture() {
 }
 
 function Earth({ reduced }: { reduced: boolean }) {
+  const orbit = useRef<THREE.Group>(null);
   const earth = useRef<THREE.Mesh>(null);
   const [texture, setTexture] = useState<THREE.Texture>();
 
@@ -65,20 +66,31 @@ function Earth({ reduced }: { reduced: boolean }) {
     setTexture(createEarthTexture());
   }, []);
 
-  useFrame((_, delta) => {
-    if (!reduced && earth.current) earth.current.rotation.y += delta * 0.045;
+  useFrame((state, delta) => {
+    if (reduced) return;
+
+    const orbitTime = state.clock.elapsedTime * (Math.PI * 2 / 78);
+    if (orbit.current) {
+      orbit.current.position.x = Math.cos(orbitTime) * 1.7;
+      orbit.current.position.y = Math.sin(orbitTime) * 0.8;
+      orbit.current.position.z = Math.sin(orbitTime) * 1.1;
+      orbit.current.scale.setScalar(1 + Math.sin(orbitTime) * 0.018);
+    }
+    if (earth.current) earth.current.rotation.y += delta * (Math.PI * 2 / 24);
   });
 
   return (
     <group position={[10, -7, 0]} scale={0.62} rotation={[0.12, -0.35, 0]}>
-      <mesh ref={earth}>
-        <sphereGeometry args={[9, 48, 48]} />
-        <meshStandardMaterial map={texture} color="#718296" roughness={0.98} metalness={0.01} transparent opacity={0.72} />
-      </mesh>
-      <mesh scale={1.055}>
-        <sphereGeometry args={[9, 48, 48]} />
-        <meshBasicMaterial color="#4ca8ff" transparent opacity={0.045} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
-      </mesh>
+      <group ref={orbit}>
+        <mesh ref={earth}>
+          <sphereGeometry args={[9, 48, 48]} />
+          <meshStandardMaterial map={texture} color="#718296" roughness={0.98} metalness={0.01} transparent opacity={0.72} />
+        </mesh>
+        <mesh scale={1.055}>
+          <sphereGeometry args={[9, 48, 48]} />
+          <meshBasicMaterial color="#4ca8ff" transparent opacity={0.045} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+      </group>
     </group>
   );
 }

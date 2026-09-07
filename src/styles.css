@@ -152,6 +152,76 @@
   background: rgb(3 6 16 / 0.32);
 }
 
+.ambient-starfield,
+.meteor-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ambient-starfield {
+  z-index: -1;
+  overflow: hidden;
+}
+
+.ambient-star {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.35;
+  animation: star-twinkle ease-in-out infinite;
+}
+
+.meteor-layer {
+  z-index: 1;
+  overflow: hidden;
+}
+
+.falling-star {
+  position: absolute;
+  width: 9rem;
+  height: 2px;
+  border-radius: 999px;
+  opacity: 0;
+  filter: drop-shadow(0 0 5px rgb(194 231 255 / 0.9));
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.falling-star-left {
+  left: -11rem;
+  transform: rotate(45deg);
+  transform-origin: right center;
+  background: linear-gradient(90deg, transparent, rgb(211 239 255 / 0.05) 20%, rgb(218 242 255 / 0.9) 82%, #ffffff);
+  animation-name: meteor-fall-right;
+}
+
+.falling-star-right {
+  right: -11rem;
+  transform: rotate(-45deg);
+  transform-origin: left center;
+  background: linear-gradient(90deg, #ffffff, rgb(218 242 255 / 0.9) 18%, rgb(211 239 255 / 0.05) 80%, transparent);
+  animation-name: meteor-fall-left;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.18; transform: scale(0.8); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+
+@keyframes meteor-fall-right {
+  0% { opacity: 0; transform: translate(-2rem, -2rem) rotate(45deg); }
+  12% { opacity: 0.95; }
+  82% { opacity: 0.72; }
+  100% { opacity: 0; transform: translate(125vw, 125vh) rotate(45deg); }
+}
+
+@keyframes meteor-fall-left {
+  0% { opacity: 0; transform: translate(2rem, -2rem) rotate(-45deg); }
+  12% { opacity: 0.95; }
+  82% { opacity: 0.72; }
+  100% { opacity: 0; transform: translate(-125vw, 125vh) rotate(-45deg); }
+}
+
 @keyframes signal-pulse {
   0% {
     box-shadow: 0 0 0 0 color-mix(in oklab, var(--signal) 45%, transparent);
@@ -847,4 +917,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mission-control-scene { display: block; }
+
+  .ambient-star {
+    animation: none;
+    opacity: 0.55;
+  }
+
+  .meteor-layer {
+    display: none;
+  }
 }

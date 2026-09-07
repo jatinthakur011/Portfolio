@@ -2,8 +2,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-const DESKTOP_STAR_COUNT = 1_200;
-const MOBILE_STAR_COUNT = 420;
 const DESKTOP_METEOR_COUNT = 8;
 const MOBILE_METEOR_COUNT = 4;
 
@@ -85,28 +83,6 @@ function Earth({ reduced }: { reduced: boolean }) {
   );
 }
 
-function Starfield({ mobile }: { mobile: boolean }) {
-  const data = useMemo(() => {
-    const count = mobile ? MOBILE_STAR_COUNT : DESKTOP_STAR_COUNT;
-    const positions = new Float32Array(count * 3);
-    for (let index = 0; index < count; index += 1) {
-      const u = Math.random() * 2 - 1;
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 34 + Math.random() * 18;
-      const ring = Math.sqrt(1 - u * u);
-      positions.set([radius * ring * Math.cos(angle), radius * u, radius * ring * Math.sin(angle)], index * 3);
-    }
-    return positions;
-  }, [mobile]);
-
-  return (
-    <points>
-      <bufferGeometry><bufferAttribute attach="attributes-position" count={data.length / 3} array={data} itemSize={3} /></bufferGeometry>
-      <pointsMaterial color="#9cb9df" size={0.06} sizeAttenuation transparent opacity={0.4} depthWrite={false} />
-    </points>
-  );
-}
-
 type MeteorState = { active: boolean; progress: number; start: THREE.Vector3; end: THREE.Vector3; speed: number };
 
 function Meteors({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
@@ -169,11 +145,9 @@ function CameraMotion({ mobile }: { mobile: boolean }) {
 function EarthScene({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
   return (
     <>
-      <color attach="background" args={["#02050d"]} />
       <ambientLight intensity={0.08} color="#7895c0" />
       <directionalLight position={[-8, 5, 10]} intensity={0.72} color="#c7d7ed" />
       <Earth reduced={reduced} />
-      <Starfield mobile={mobile} />
       <Meteors mobile={mobile} reduced={reduced} />
       <CameraMotion mobile={mobile} />
     </>
@@ -185,7 +159,7 @@ export function MissionControlScene() {
 
   return (
     <div className="mission-control-scene" aria-hidden="true">
-      <Canvas className="mission-control-canvas" camera={{ position: [0, 0, 48], fov: 42 }} dpr={[1, 2]} gl={{ alpha: false, antialias: true, powerPreference: "high-performance" }}>
+      <Canvas className="mission-control-canvas" camera={{ position: [0, 0, 48], fov: 42 }} dpr={[1, 2]} gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}>
         <EarthScene mobile={mobile} reduced={reduced} />
       </Canvas>
     </div>

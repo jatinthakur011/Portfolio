@@ -145,92 +145,6 @@
   }
 }
 
-.sky-parallax-layer {
-  transform: translateY(var(--sky-scroll, 0px));
-  transition: transform 0.2s linear;
-}
-
-@utility earth-glow {
-  position: fixed;
-  left: 50%;
-  bottom: -62vh;
-  width: 150vw;
-  max-width: 1600px;
-  height: 62vh;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(
-    closest-side,
-    color-mix(in oklab, var(--primary) 38%, transparent),
-    color-mix(in oklab, var(--primary) 14%, transparent) 55%,
-    transparent 72%
-  );
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border-top: 1.5px solid color-mix(in oklab, var(--primary) 55%, white 20%);
-    filter: blur(0.3px);
-  }
-}
-
-@utility star-dot {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  animation: twinkle 4s ease-in-out infinite;
-}
-
-@utility meteor-streak {
-  position: absolute;
-  top: -140px;
-  width: 2px;
-  height: 110px;
-  border-radius: 2px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    oklch(0.9 0.06 258 / 0.85) 80%,
-    white 100%
-  );
-  transform: rotate(35deg);
-  opacity: 0;
-  animation-name: meteor-fall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.85;
-  }
-}
-
-@keyframes meteor-fall {
-  0% {
-    transform: translate(0, 0) rotate(35deg);
-    opacity: 0;
-  }
-  6% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(46vw, 125vh) rotate(35deg);
-    opacity: 0;
-  }
-}
-
 @keyframes signal-pulse {
   0% {
     box-shadow: 0 0 0 0 color-mix(in oklab, var(--signal) 45%, transparent);
@@ -694,28 +608,20 @@
 .mission-control-scene {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
   background: transparent;
 }
 
-.mission-control-scene canvas {
+.mission-control-canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
   display: block;
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.mission-horizon {
-  position: absolute;
-  right: -12vw;
-  bottom: -46vh;
-  left: -12vw;
-  height: 58vh;
-  border-radius: 50% 50% 0 0;
-  border-top: 1px solid color-mix(in oklab, var(--primary) 46%, transparent);
-  background: radial-gradient(ellipse at center, color-mix(in oklab, var(--primary) 19%, transparent), transparent 65%);
-  box-shadow: 0 -10px 80px color-mix(in oklab, var(--primary) 24%, transparent);
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: -1;
 }
 
 .sky-field-fallback {
@@ -936,10 +842,6 @@
     display: none;
   }
 
-  .sky-parallax-layer {
-    transform: none;
-  }
-
   .hero-photo,
   .orbit-ring,
   .orbit-ring-outer,
@@ -968,18 +870,4 @@
     display: none;
   }
 
-  .sky-field-fallback .star-dot,
-  .sky-field-fallback .meteor-streak,
-  .sky-parallax-layer {
-    animation: none;
-    transform: none;
-  }
-
-  .sky-field-fallback .star-dot {
-    opacity: 0.55;
-  }
-
-  .sky-field-fallback .meteor-streak {
-    display: none;
-  }
 }

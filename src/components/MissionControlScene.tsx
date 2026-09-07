@@ -65,10 +65,10 @@ function useResponsiveMotionMode() {
 
 function makeParticleData(
   count: number,
-  createPosition: () => THREE.Vector3,
+  createPosition: (index: number) => THREE.Vector3,
   sizeRange: [number, number],
   alphaRange: [number, number],
-  colorAt: () => THREE.Color,
+  colorAt: (position: THREE.Vector3) => THREE.Color,
 ): ParticleData {
   const positions = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
@@ -76,8 +76,8 @@ function makeParticleData(
   const colors = new Float32Array(count * 3);
 
   for (let index = 0; index < count; index += 1) {
-    const position = createPosition();
-    const color = colorAt();
+    const position = createPosition(index);
+    const color = colorAt(position);
     positions[index * 3] = position.x;
     positions[index * 3 + 1] = position.y;
     positions[index * 3 + 2] = position.z;
@@ -119,17 +119,23 @@ function Galaxy({ mobile }: { mobile: boolean }) {
   const data = useMemo(
     () => makeParticleData(
       count,
-      () => {
-        const radius = Math.pow(Math.random(), 0.62) * 5.7;
-        const arm = Math.floor(Math.random() * 5) * ((Math.PI * 2) / 5);
-        const angle = arm + radius * 1.55 + (Math.random() - 0.5) * (0.34 + radius * 0.09);
-        const thickness = (Math.random() - 0.5) * (0.12 + radius * 0.08);
-        return new THREE.Vector3(Math.cos(angle) * radius, thickness, Math.sin(angle) * radius * 0.56);
+      (index) => {
+        const radius = Math.pow(Math.random(), 0.72) * 5.8;
+        const branchAngle = (index % 5) * ((Math.PI * 2) / 5);
+        const spinAngle = radius * 1.45;
+        const angle = branchAngle + spinAngle;
+        const armScatter = (Math.random() - 0.5) * (0.08 + radius * 0.055);
+        const thickness = (Math.random() - 0.5) * (0.08 + radius * 0.045);
+        return new THREE.Vector3(
+          Math.cos(angle + armScatter) * radius,
+          thickness,
+          Math.sin(angle + armScatter) * radius * 0.58,
+        );
       },
-      [0.025, 0.095],
-      [0.24, 0.9],
-      () => {
-        const radiusRatio = Math.random();
+      [0.02, 0.05],
+      [0.08, 0.34],
+      (position) => {
+        const radiusRatio = THREE.MathUtils.clamp(position.length() / 5.8, 0, 1);
         const color = new THREE.Color("#fff4cc");
         color.lerp(new THREE.Color("#806dff"), radiusRatio);
         color.lerp(new THREE.Color("#75bfff"), radiusRatio * 0.45);
@@ -149,10 +155,6 @@ function Galaxy({ mobile }: { mobile: boolean }) {
   return (
     <group ref={group} rotation={[0.28, -0.35, 0]} position={[0, 0.15, -2.3]}>
       <ParticlePoints data={data} />
-      <mesh>
-        <sphereGeometry args={[0.22, 16, 16]} />
-        <meshBasicMaterial color="#fff2c2" toneMapped={false} />
-      </mesh>
     </group>
   );
 }
@@ -214,6 +216,7 @@ export function MissionControlScene() {
   return (
     <div className="mission-control-scene" aria-hidden="true">
       <Canvas
+        className="mission-control-canvas"
         camera={{ position: [0, 0.1, 8.5], fov: 53 }}
         dpr={mobile ? [1, 1] : [1, 1.35]}
         gl={{ alpha: false, antialias: false, powerPreference: "high-performance" }}

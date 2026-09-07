@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -173,17 +173,91 @@ function CursorGlow() {
   const y = useMotionValue(-100);
   const springX = useSpring(x, { stiffness: 140, damping: 24, mass: 0.4 });
   const springY = useSpring(y, { stiffness: 140, damping: 24, mass: 0.4 });
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     const move = (event: PointerEvent) => {
       x.set(event.clientX);
       y.set(event.clientY);
     };
+    const setHover = (event: PointerEvent) => {
+      setIsHovering(Boolean((event.target as HTMLElement).closest("a, button")));
+    };
     window.addEventListener("pointermove", move, { passive: true });
-    return () => window.removeEventListener("pointermove", move);
+    window.addEventListener("pointerover", setHover, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerover", setHover);
+    };
   }, [x, y]);
 
-  return <motion.div className="cursor-glow" style={{ x: springX, y: springY }} aria-hidden="true" />;
+  return (
+    <motion.div
+      className={`cursor-glow ${isHovering ? "cursor-glow-active" : ""}`}
+      style={{ x: springX, y: springY }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function useTypingLoop(lines: string[]) {
+  const [line, setLine] = useState("");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setLine(lines[0]);
+      return;
+    }
+
+    const target = lines[lineIndex];
+    const finished = line === target;
+    const erased = line.length === 0 && deleting;
+    const delay = finished ? 1500 : erased ? 400 : deleting ? 42 : 78;
+    const timer = window.setTimeout(() => {
+      if (finished) {
+        setDeleting(true);
+      } else if (erased) {
+        setDeleting(false);
+        setLineIndex((index) => (index + 1) % lines.length);
+      } else {
+        setLine((current) =>
+          deleting ? current.slice(0, -1) : target.slice(0, current.length + 1),
+        );
+      }
+    }, delay);
+    return () => window.clearTimeout(timer);
+  }, [deleting, line, lineIndex, lines, prefersReducedMotion]);
+
+  return line;
+}
+
+function MagneticLink({ children, className, ...props }: React.ComponentProps<"a">) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  return (
+    <a
+      {...props}
+      className={className}
+      onMouseMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        setOffset({
+          x: (event.clientX - rect.left - rect.width / 2) * 0.12,
+          y: (event.clientY - rect.top - rect.height / 2) * 0.12,
+        });
+        props.onMouseMove?.(event);
+      }}
+      onMouseLeave={(event) => {
+        setOffset({ x: 0, y: 0 });
+        props.onMouseLeave?.(event);
+      }}
+      style={{ ...props.style, transform: `translate(${offset.x}px, ${offset.y}px)` }}
+    >
+      {children}
+    </a>
+  );
 }
 
 function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
@@ -233,6 +307,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
 
 function Portfolio() {
   const active = useActiveSection();
+  const typedIdentity = useTypingLoop(["full-stack developer", "devops engineer", "problem solver"]);
   const [copiedContact, setCopiedContact] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -337,7 +412,8 @@ function Portfolio() {
               className="reveal glass-panel mx-auto mt-8 max-w-xl px-5 py-4 text-left font-mono text-sm text-ink-soft"
               style={{ animationDelay: "0.2s" }}
             >
-              <span style={{ color: "var(--signal)" }}>$</span> whoami
+              <span style={{ color: "var(--signal)" }}>$</span>{" "}
+              <span aria-live="polite">whoami: {typedIdentity}</span>
               <span className="terminal-cursor" aria-hidden="true">▍</span>
               <br />
               <span style={{ color: "var(--primary)" }}>jatin</span> — builds web
@@ -348,13 +424,13 @@ function Portfolio() {
               className="reveal mt-8 flex flex-wrap justify-center gap-3.5"
               style={{ animationDelay: "0.25s" }}
             >
-              <a href="#projects" className="btn-solid">
+              <MagneticLink href="#projects" className="btn-solid">
                 View My Work
-              </a>
-              <a href="#contact" className="btn-ghost-outline">
+              </MagneticLink>
+              <MagneticLink href="#contact" className="btn-ghost-outline">
                 Get In Touch
-              </a>
-              <a
+              </MagneticLink>
+              <MagneticLink
                 href="/resume/Jatin_Thakur_Resume_DevOps.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -362,7 +438,7 @@ function Portfolio() {
                 className="btn-ghost-outline"
               >
                 Download Resume
-              </a>
+              </MagneticLink>
             </div>
 
             <div

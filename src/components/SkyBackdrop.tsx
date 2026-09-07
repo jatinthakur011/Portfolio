@@ -11,11 +11,24 @@ type Meteor = { left: string; delay: string; duration: string };
 export function SkyBackdrop() {
   // Random positions are generated client-side only, to avoid SSR mismatch.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+
+    const updateParallax = () => {
+      document.documentElement.style.setProperty(
+        "--sky-scroll",
+        `${Math.min(window.scrollY * 0.045, 32)}px`,
+      );
+    };
+
+    updateParallax();
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    return () => window.removeEventListener("scroll", updateParallax);
+  }, []);
 
   const stars = useMemo<Star[]>(
     () =>
-      Array.from({ length: 80 }, () => {
+      Array.from({ length: 110 }, () => {
         const size = Math.random() * 1.6 + 0.6;
         return {
           left: `${Math.random() * 100}vw`,
@@ -29,10 +42,10 @@ export function SkyBackdrop() {
 
   const meteors = useMemo<Meteor[]>(
     () =>
-      Array.from({ length: 10 }, () => ({
+      Array.from({ length: 3 }, () => ({
         left: `${Math.random() * 90 - 10}vw`,
-        delay: `${Math.random() * 12}s`,
-        duration: `${Math.random() * 3 + 3.5}s`,
+        delay: `${Math.random() * 7 + 8}s`,
+        duration: `${Math.random() * 1.5 + 2.8}s`,
       })),
     [],
   );
@@ -41,7 +54,7 @@ export function SkyBackdrop() {
     <>
       <MissionControlScene />
       <div className="sky-field sky-field-fallback" aria-hidden="true">
-        <div className="absolute inset-0">
+        <div className="sky-parallax-layer absolute inset-0">
           {mounted && stars.map((star, i) => (
             <span
               key={`star-${i}`}

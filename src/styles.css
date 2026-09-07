@@ -145,6 +145,11 @@
   }
 }
 
+.sky-parallax-layer {
+  transform: translateY(var(--sky-scroll, 0px));
+  transition: transform 0.2s linear;
+}
+
 @utility earth-glow {
   position: fixed;
   left: 50%;
@@ -731,6 +736,29 @@
   opacity: 0.42;
 }
 
+.cursor-glow::before,
+.cursor-glow::after {
+  content: "";
+  position: absolute;
+  inset: 31px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 14px color-mix(in oklab, var(--signal) 75%, transparent);
+}
+
+.cursor-glow::after {
+  inset: 14px;
+  border: 1px solid color-mix(in oklab, var(--signal) 60%, transparent);
+  background: transparent;
+  box-shadow: 0 0 18px color-mix(in oklab, var(--primary) 50%, transparent);
+  transition: inset 0.2s ease, border-color 0.2s ease;
+}
+
+.cursor-glow-active::after {
+  inset: 4px;
+  border-color: var(--signal);
+}
+
 .photo-frame-desktop {
   position: absolute;
   inset: -14px;
@@ -907,6 +935,19 @@
   .photo-frame-desktop,
   .skills-sphere-desktop {
     display: none;
+  }
+
+  .sky-parallax-layer {
+    transform: none;
+  }
+
+  .hero-photo,
+  .orbit-ring,
+  .orbit-ring-outer,
+  .terminal-cursor,
+  .aurora-text,
+  .section-title {
+    animation: none;
   }
 
   .sky-field-fallback {

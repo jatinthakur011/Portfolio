@@ -61,7 +61,11 @@ function createEarthTexture() {
 
 function Earth({ reduced }: { reduced: boolean }) {
   const earth = useRef<THREE.Mesh>(null);
-  const texture = useMemo(createEarthTexture, []);
+  const [texture, setTexture] = useState<THREE.Texture>();
+
+  useEffect(() => {
+    setTexture(createEarthTexture());
+  }, []);
 
   useFrame((_, delta) => {
     if (!reduced && earth.current) earth.current.rotation.y += delta * 0.045;

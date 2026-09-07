@@ -2,138 +2,188 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-const DESKTOP_GALAXY_COUNT = 12_000;
-const MOBILE_GALAXY_COUNT = 2_600;
-const DUST_COUNT = 420;
-
-const particleVertexShader = `
-  attribute float aSize;
-  attribute float aAlpha;
-  attribute vec3 aColor;
-  varying float vAlpha;
-  varying vec3 vColor;
-  void main() {
-    vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_Position = projectionMatrix * viewPosition;
-    gl_PointSize = aSize * (92.0 / max(1.0, -viewPosition.z));
-    vAlpha = aAlpha;
-    vColor = aColor;
-  }
-`;
-
-const particleFragmentShader = `
-  varying float vAlpha;
-  varying vec3 vColor;
-  void main() {
-    float distanceFromCenter = distance(gl_PointCoord, vec2(0.5));
-    float softDisc = 1.0 - smoothstep(0.08, 0.5, distanceFromCenter);
-    if (softDisc <= 0.01) discard;
-    gl_FragColor = vec4(vColor, vAlpha * softDisc);
-  }
-`;
-
-type ParticleData = {
-  positions: Float32Array;
-  sizes: Float32Array;
-  alphas: Float32Array;
-  colors: Float32Array;
-};
+const DESKTOP_STAR_COUNT = 1_200;
+const MOBILE_STAR_COUNT = 420;
+const DESKTOP_METEOR_COUNT = 8;
+const MOBILE_METEOR_COUNT = 4;
 
 function useMotionMode() {
   const [mode, setMode] = useState({ mobile: false, reduced: false });
+
   useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 767px)");
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setMode({ mobile: mobile.matches, reduced: reduced.matches });
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setMode({ mobile: mobileQuery.matches, reduced: reducedQuery.matches });
     update();
-    mobile.addEventListener("change", update);
-    reduced.addEventListener("change", update);
-    return () => { mobile.removeEventListener("change", update); reduced.removeEventListener("change", update); };
+    mobileQuery.addEventListener("change", update);
+    reducedQuery.addEventListener("change", update);
+    return () => {
+      mobileQuery.removeEventListener("change", update);
+      reducedQuery.removeEventListener("change", update);
+    };
   }, []);
+
   return mode;
 }
 
-function createParticles(count: number, positionAt: (index: number) => THREE.Vector3, colorAt: (position: THREE.Vector3) => THREE.Color, size: [number, number], alpha: [number, number]): ParticleData {
-  const positions = new Float32Array(count * 3);
-  const sizes = new Float32Array(count);
-  const alphas = new Float32Array(count);
-  const colors = new Float32Array(count * 3);
-  for (let index = 0; index < count; index += 1) {
-    const position = positionAt(index);
-    const color = colorAt(position);
-    positions.set([position.x, position.y, position.z], index * 3);
-    sizes[index] = THREE.MathUtils.lerp(size[0], size[1], Math.random());
-    alphas[index] = THREE.MathUtils.lerp(alpha[0], alpha[1], Math.random());
-    colors.set([color.r, color.g, color.b], index * 3);
+function createEarthTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 512;
+  const context = canvas.getContext("2d");
+  if (!context) return new THREE.Texture();
+
+  context.fillStyle = "#12528b";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  const continents = [
+    [180, 170, 125, 65], [290, 250, 75, 105], [440, 130, 170, 55],
+    [530, 265, 140, 75], [720, 150, 120, 70], [825, 295, 150, 82],
+    [930, 105, 85, 48], [70, 340, 95, 38],
+  ];
+  continents.forEach(([x, y, width, height], index) => {
+    context.beginPath();
+    context.ellipse(x, y, width, height, (index % 3) * 0.35, 0, Math.PI * 2);
+    context.fillStyle = index % 3 === 0 ? "#5f7642" : "#88784b";
+    context.fill();
+  });
+  context.globalAlpha = 0.2;
+  for (let index = 0; index < 24; index += 1) {
+    context.fillStyle = "#c7e6ba";
+    context.beginPath();
+    context.ellipse(Math.random() * canvas.width, Math.random() * canvas.height, 30 + Math.random() * 70, 5 + Math.random() * 12, Math.random(), 0, Math.PI * 2);
+    context.fill();
   }
-  return { positions, sizes, alphas, colors };
+  context.globalAlpha = 1;
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
 }
 
-function Points({ data }: { data: ParticleData }) {
-  const count = data.sizes.length;
-  return <points frustumCulled={false}>
-    <bufferGeometry>
-      <bufferAttribute attach="attributes-position" count={count} array={data.positions} itemSize={3} />
-      <bufferAttribute attach="attributes-aSize" count={count} array={data.sizes} itemSize={1} />
-      <bufferAttribute attach="attributes-aAlpha" count={count} array={data.alphas} itemSize={1} />
-      <bufferAttribute attach="attributes-aColor" count={count} array={data.colors} itemSize={3} />
-    </bufferGeometry>
-    <shaderMaterial vertexShader={particleVertexShader} fragmentShader={particleFragmentShader} transparent depthWrite={false} blending={THREE.AdditiveBlending} />
-  </points>;
-}
+function Earth({ reduced }: { reduced: boolean }) {
+  const earth = useRef<THREE.Mesh>(null);
+  const texture = useMemo(createEarthTexture, []);
 
-function Galaxy({ mobile }: { mobile: boolean }) {
-  const group = useRef<THREE.Group>(null);
-  const count = mobile ? MOBILE_GALAXY_COUNT : DESKTOP_GALAXY_COUNT;
-  const data = useMemo(() => createParticles(count, (index) => {
-    const radius = Math.pow(Math.random(), 0.72) * 5.8;
-    const branchAngle = (index % 5) * ((Math.PI * 2) / 5);
-    const angle = branchAngle + radius * 1.45 + (Math.random() - 0.5) * (0.08 + radius * 0.055);
-    return new THREE.Vector3(Math.cos(angle) * radius, (Math.random() - 0.5) * (0.08 + radius * 0.045), Math.sin(angle) * radius * 0.58);
-  }, (position) => {
-    const ratio = THREE.MathUtils.clamp(position.length() / 5.8, 0, 1);
-    return new THREE.Color("#fff4cc").lerp(new THREE.Color("#806dff"), ratio).lerp(new THREE.Color("#75bfff"), ratio * 0.45);
-  }, [0.02, 0.05], [0.08, 0.34]), [count]);
-  useFrame((state, delta) => {
-    if (!group.current) return;
-    group.current.rotation.y += delta * 0.018;
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, 0.28 + state.mouse.y * 0.035, 0.018);
+  useFrame((_, delta) => {
+    if (!reduced && earth.current) earth.current.rotation.y += delta * 0.045;
   });
-  return <group ref={group} rotation={[0.28, -0.35, 0]} position={[0, 0.15, -2.3]}><Points data={data} /></group>;
+
+  return (
+    <group rotation={[0.12, -0.35, 0]}>
+      <mesh ref={earth}>
+        <sphereGeometry args={[9, 48, 48]} />
+        <meshStandardMaterial map={texture} roughness={0.92} metalness={0.02} />
+      </mesh>
+      <mesh scale={1.055}>
+        <sphereGeometry args={[9, 48, 48]} />
+        <meshBasicMaterial color="#4ca8ff" transparent opacity={0.13} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </mesh>
+    </group>
+  );
 }
 
-function Dust({ mobile }: { mobile: boolean }) {
-  const group = useRef<THREE.Group>(null);
-  const data = useMemo(() => createParticles(mobile ? 230 : DUST_COUNT, () => new THREE.Vector3((Math.random() - 0.5) * 13, (Math.random() - 0.5) * 8, Math.random() * 4 - 0.5), () => new THREE.Color(Math.random() > 0.6 ? "#c5b5ff" : "#8fcfff"), [0.06, 0.16], [0.16, 0.55]), [mobile]);
+function Starfield({ mobile }: { mobile: boolean }) {
+  const data = useMemo(() => {
+    const count = mobile ? MOBILE_STAR_COUNT : DESKTOP_STAR_COUNT;
+    const positions = new Float32Array(count * 3);
+    for (let index = 0; index < count; index += 1) {
+      const u = Math.random() * 2 - 1;
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 34 + Math.random() * 18;
+      const ring = Math.sqrt(1 - u * u);
+      positions.set([radius * ring * Math.cos(angle), radius * u, radius * ring * Math.sin(angle)], index * 3);
+    }
+    return positions;
+  }, [mobile]);
+
+  return (
+    <points>
+      <bufferGeometry><bufferAttribute attach="attributes-position" count={data.length / 3} array={data} itemSize={3} /></bufferGeometry>
+      <pointsMaterial color="#b8d8ff" size={0.075} sizeAttenuation transparent opacity={0.7} depthWrite={false} />
+    </points>
+  );
+}
+
+type MeteorState = { active: boolean; progress: number; start: THREE.Vector3; end: THREE.Vector3; speed: number };
+
+function Meteors({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
+  const count = mobile ? MOBILE_METEOR_COUNT : DESKTOP_METEOR_COUNT;
+  const lines = useRef<Array<THREE.Line | null>>([]);
+  const states = useRef<MeteorState[]>([]);
+  const nextSpawn = useRef(0);
+
+  useMemo(() => {
+    states.current = Array.from({ length: count }, () => ({ active: false, progress: 0, start: new THREE.Vector3(), end: new THREE.Vector3(), speed: 0.18 }));
+    return states.current;
+  }, [count]);
+
   useFrame((state, delta) => {
-    if (!group.current) return;
-    group.current.rotation.y -= delta * 0.008;
-    group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, state.mouse.x * (mobile ? 0 : 0.18), 0.025);
+    if (reduced) return;
+    if (state.clock.elapsedTime > nextSpawn.current) {
+      const available = states.current.find((meteor) => !meteor.active);
+      if (available) {
+        available.active = true;
+        available.progress = 0;
+        available.start.set((Math.random() - 0.5) * 24, 8 + Math.random() * 8, -5 - Math.random() * 8);
+        available.end.set((Math.random() - 0.5) * 7, (Math.random() - 0.5) * 7, 0);
+        available.speed = 0.12 + Math.random() * 0.08;
+      }
+      nextSpawn.current = state.clock.elapsedTime + (mobile ? 2.2 : 1.15);
+    }
+    states.current.forEach((meteor, index) => {
+      const line = lines.current[index];
+      if (!line) return;
+      if (!meteor.active) { line.visible = false; return; }
+      meteor.progress += delta * meteor.speed;
+      if (meteor.progress >= 1) { meteor.active = false; line.visible = false; return; }
+      const point = meteor.start.clone().lerp(meteor.end, meteor.progress);
+      const tail = meteor.start.clone().lerp(meteor.end, Math.max(0, meteor.progress - 0.1));
+      line.geometry.setFromPoints([tail, point]);
+      line.visible = true;
+      (line.material as THREE.LineBasicMaterial).opacity = 0.8 * (1 - meteor.progress);
+    });
   });
-  return <group ref={group}><Points data={data} /></group>;
+
+  return <>{states.current.map((_, index) => (
+    <line key={index} ref={(line) => { lines.current[index] = line; }} visible={false}>
+      <bufferGeometry /><lineBasicMaterial color="#d7ecff" transparent opacity={0} linewidth={1} />
+    </line>
+  ))}</>;
 }
 
-function CameraDrift({ mobile }: { mobile: boolean }) {
+function CameraMotion({ mobile }: { mobile: boolean }) {
   const { camera } = useThree();
   useFrame(({ clock, mouse }) => {
-    const drift = mobile ? 0 : 0.16;
     const time = clock.getElapsedTime();
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, Math.sin(time * 0.08) * 0.16 + mouse.x * drift, 0.012);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, Math.cos(time * 0.065) * 0.1 + mouse.y * drift * 0.7, 0.012);
-    camera.lookAt(0, 0, -2.4);
+    const parallax = mobile ? 0.04 : 0.12;
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, Math.sin(time * 0.06) * 0.35 + mouse.x * parallax, 0.018);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, Math.cos(time * 0.05) * 0.18 + mouse.y * parallax, 0.018);
+    camera.lookAt(0, 0, 0);
   });
   return null;
 }
 
+function EarthScene({ mobile, reduced }: { mobile: boolean; reduced: boolean }) {
+  return (
+    <>
+      <color attach="background" args={["#02050d"]} />
+      <ambientLight intensity={0.18} color="#9bbcff" />
+      <directionalLight position={[-8, 5, 10]} intensity={2.2} color="#fff4d2" />
+      <Earth reduced={reduced} />
+      <Starfield mobile={mobile} />
+      <Meteors mobile={mobile} reduced={reduced} />
+      <CameraMotion mobile={mobile} />
+    </>
+  );
+}
+
 export function MissionControlScene() {
   const { mobile, reduced } = useMotionMode();
-  if (reduced) return null;
-  return <div className="mission-control-scene" aria-hidden="true">
-    <Canvas className="mission-control-canvas" camera={{ position: [0, 0.1, 8.5], fov: 53 }} dpr={mobile ? [1, 1] : [1, 1.35]} gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}>
-      <color attach="background" args={["#030514"]} />
-      <Galaxy mobile={mobile} />
-      <Dust mobile={mobile} />
-      <CameraDrift mobile={mobile} />
-    </Canvas>
-  </div>;
+
+  return (
+    <div className="mission-control-scene" aria-hidden="true">
+      <Canvas className="mission-control-canvas" camera={{ position: [0, 0, 27], fov: 42 }} dpr={[1, 2]} gl={{ alpha: false, antialias: true, powerPreference: "high-performance" }}>
+        <EarthScene mobile={mobile} reduced={reduced} />
+      </Canvas>
+    </div>
+  );
 }

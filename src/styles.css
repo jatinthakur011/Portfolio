@@ -124,15 +124,20 @@
 .mission-control-scene {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
   background: transparent;
 }
 
-.mission-control-canvas { display: block; width: 100% !important; height: 100% !important; }
-
-.sky-field-fallback { display: none; }
+.mission-control-canvas {
+  position: fixed !important;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100vw !important;
+  height: 100vh !important;
+}
 
 @keyframes signal-pulse {
   0% {
@@ -828,5 +833,4 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mission-control-scene { display: none; }
-  .sky-field-fallback { display: block; }
+  .mission-control-scene { display: block; }

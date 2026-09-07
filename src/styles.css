@@ -135,8 +135,21 @@
   inset: 0;
   z-index: -1;
   display: block;
+  pointer-events: none;
   width: 100vw !important;
   height: 100vh !important;
+}
+
+.mission-control-canvas canvas {
+  pointer-events: none !important;
+}
+
+.mission-control-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgb(3 6 16 / 0.32);
 }
 
 @keyframes signal-pulse {

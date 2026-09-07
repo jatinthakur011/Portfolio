@@ -12,6 +12,9 @@ export function SkyBackdrop() {
   if (!ready) return null;
 
   return (
-    <MissionControlScene />
+    <>
+      <MissionControlScene />
+      <div className="mission-control-dim" aria-hidden="true" />
+    </>
   );
 }

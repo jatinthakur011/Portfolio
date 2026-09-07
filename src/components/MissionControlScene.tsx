@@ -72,14 +72,14 @@ function Earth({ reduced }: { reduced: boolean }) {
   });
 
   return (
-    <group rotation={[0.12, -0.35, 0]}>
+    <group position={[10, -7, 0]} scale={0.62} rotation={[0.12, -0.35, 0]}>
       <mesh ref={earth}>
         <sphereGeometry args={[9, 48, 48]} />
-        <meshStandardMaterial map={texture} roughness={0.92} metalness={0.02} />
+        <meshStandardMaterial map={texture} color="#718296" roughness={0.98} metalness={0.01} transparent opacity={0.72} />
       </mesh>
       <mesh scale={1.055}>
         <sphereGeometry args={[9, 48, 48]} />
-        <meshBasicMaterial color="#4ca8ff" transparent opacity={0.13} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <meshBasicMaterial color="#4ca8ff" transparent opacity={0.045} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </group>
   );
@@ -102,7 +102,7 @@ function Starfield({ mobile }: { mobile: boolean }) {
   return (
     <points>
       <bufferGeometry><bufferAttribute attach="attributes-position" count={data.length / 3} array={data} itemSize={3} /></bufferGeometry>
-      <pointsMaterial color="#b8d8ff" size={0.075} sizeAttenuation transparent opacity={0.7} depthWrite={false} />
+      <pointsMaterial color="#9cb9df" size={0.06} sizeAttenuation transparent opacity={0.4} depthWrite={false} />
     </points>
   );
 }
@@ -170,8 +170,8 @@ function EarthScene({ mobile, reduced }: { mobile: boolean; reduced: boolean }) 
   return (
     <>
       <color attach="background" args={["#02050d"]} />
-      <ambientLight intensity={0.18} color="#9bbcff" />
-      <directionalLight position={[-8, 5, 10]} intensity={2.2} color="#fff4d2" />
+      <ambientLight intensity={0.08} color="#7895c0" />
+      <directionalLight position={[-8, 5, 10]} intensity={0.72} color="#c7d7ed" />
       <Earth reduced={reduced} />
       <Starfield mobile={mobile} />
       <Meteors mobile={mobile} reduced={reduced} />
@@ -185,7 +185,7 @@ export function MissionControlScene() {
 
   return (
     <div className="mission-control-scene" aria-hidden="true">
-      <Canvas className="mission-control-canvas" camera={{ position: [0, 0, 27], fov: 42 }} dpr={[1, 2]} gl={{ alpha: false, antialias: true, powerPreference: "high-performance" }}>
+      <Canvas className="mission-control-canvas" camera={{ position: [0, 0, 48], fov: 42 }} dpr={[1, 2]} gl={{ alpha: false, antialias: true, powerPreference: "high-performance" }}>
         <EarthScene mobile={mobile} reduced={reduced} />
       </Canvas>
     </div>

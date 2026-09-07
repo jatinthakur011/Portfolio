@@ -24,74 +24,14 @@ function useMotionMode() {
   return mode;
 }
 
-function createEarthTexture() {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1024;
-  canvas.height = 512;
-  const context = canvas.getContext("2d");
-  if (!context) return new THREE.Texture();
-
-  context.fillStyle = "#12528b";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  const continents = [
-    [180, 170, 125, 65], [290, 250, 75, 105], [440, 130, 170, 55],
-    [530, 265, 140, 75], [720, 150, 120, 70], [825, 295, 150, 82],
-    [930, 105, 85, 48], [70, 340, 95, 38],
-  ];
-  continents.forEach(([x, y, width, height], index) => {
-    context.beginPath();
-    context.ellipse(x, y, width, height, (index % 3) * 0.35, 0, Math.PI * 2);
-    context.fillStyle = index % 3 === 0 ? "#5f7642" : "#88784b";
-    context.fill();
-  });
-  context.globalAlpha = 0.2;
-  for (let index = 0; index < 24; index += 1) {
-    context.fillStyle = "#c7e6ba";
-    context.beginPath();
-    context.ellipse(Math.random() * canvas.width, Math.random() * canvas.height, 30 + Math.random() * 70, 5 + Math.random() * 12, Math.random(), 0, Math.PI * 2);
-    context.fill();
-  }
-  context.globalAlpha = 1;
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
-
-function Earth({ reduced }: { reduced: boolean }) {
-  const orbit = useRef<THREE.Group>(null);
-  const earth = useRef<THREE.Mesh>(null);
-  const [texture, setTexture] = useState<THREE.Texture>();
-
-  useEffect(() => {
-    setTexture(createEarthTexture());
-  }, []);
-
-  useFrame((state, delta) => {
-    if (reduced) return;
-
-    const orbitTime = state.clock.elapsedTime * (Math.PI * 2 / 78);
-    if (orbit.current) {
-      orbit.current.position.x = Math.cos(orbitTime) * 1.7;
-      orbit.current.position.y = Math.sin(orbitTime) * 0.8;
-      orbit.current.position.z = Math.sin(orbitTime) * 1.1;
-      orbit.current.scale.setScalar(1 + Math.sin(orbitTime) * 0.018);
-    }
-    if (earth.current) earth.current.rotation.y += delta * (Math.PI * 2 / 24);
-  });
-
+function Earth() {
   return (
-    <group position={[10, -7, 0]} scale={0.62} rotation={[0.12, -0.35, 0]}>
-      <group ref={orbit}>
-        <mesh ref={earth}>
-          <sphereGeometry args={[9, 48, 48]} />
-          <meshStandardMaterial map={texture} color="#718296" roughness={0.98} metalness={0.01} transparent opacity={0.72} />
-        </mesh>
-        <mesh scale={1.055}>
-          <sphereGeometry args={[9, 48, 48]} />
-          <meshBasicMaterial color="#4ca8ff" transparent opacity={0.045} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
-        </mesh>
-      </group>
-    </group>
+    <div className="earth-orbit" aria-hidden="true">
+      <div className="earth-sphere">
+        <div className="earth-surface" />
+        <div className="earth-highlight" />
+      </div>
+    </div>
   );
 }
 
@@ -159,7 +99,6 @@ function EarthScene({ mobile, reduced }: { mobile: boolean; reduced: boolean }) 
     <>
       <ambientLight intensity={0.08} color="#7895c0" />
       <directionalLight position={[-8, 5, 10]} intensity={0.72} color="#c7d7ed" />
-      <Earth reduced={reduced} />
       <Meteors mobile={mobile} reduced={reduced} />
       <CameraMotion mobile={mobile} />
     </>
@@ -171,6 +110,7 @@ export function MissionControlScene() {
 
   return (
     <div className="mission-control-scene" aria-hidden="true">
+      <Earth />
       <Canvas className="mission-control-canvas" camera={{ position: [0, 0, 48], fov: 42 }} dpr={[1, 2]} gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}>
         <EarthScene mobile={mobile} reduced={reduced} />
       </Canvas>

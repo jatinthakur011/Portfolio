@@ -144,15 +144,19 @@
 
 .earth-sphere {
   position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 0 60px 10px rgb(80 180 255 / 15%), inset -18px -16px 26px rgb(0 0 0 / 48%);
-  background: #061627;
+  box-shadow: 0 0 74px 14px rgb(38 196 255 / 22%), inset -22px -18px 30px rgb(0 0 0 / 58%);
+  background: #020811;
 }
 
 .earth-surface,
+.earth-continents,
+.earth-night,
+.earth-rim,
 .earth-highlight {
   position: absolute;
   inset: 0;
@@ -161,20 +165,71 @@
 
 .earth-surface {
   background:
-    radial-gradient(ellipse at 22% 43%, rgb(76 133 85 / 58%) 0 7%, transparent 8%),
-    radial-gradient(ellipse at 54% 30%, rgb(105 145 83 / 62%) 0 8%, transparent 9%),
-    radial-gradient(ellipse at 68% 63%, rgb(61 112 74 / 58%) 0 11%, transparent 12%),
-    radial-gradient(ellipse at 39% 72%, rgb(91 137 78 / 48%) 0 6%, transparent 7%),
-    radial-gradient(circle at 35% 35%, #2a6fa8 0%, #1b4d7a 25%, #0d2a4a 50%, #061627 75%, #020810 100%);
-  background-size: 180% 100%, 170% 100%, 160% 100%, 190% 100%, 100% 100%;
-  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-  animation: earth-spin 25s linear infinite;
-  will-change: background-position;
+    radial-gradient(circle at 24% 20%, rgb(150 248 255 / 30%), transparent 25%),
+    radial-gradient(circle at 25% 27%, #1ec1d1 0%, #0874a7 30%, #06436f 54%, #031a32 79%, #010810 100%);
+}
+
+.earth-continents {
+  opacity: 0.9;
+  background:
+    radial-gradient(ellipse 23% 13% at 28% 31%, #8aa85b 0 45%, transparent 48%),
+    radial-gradient(ellipse 17% 29% at 45% 52%, #527d45 0 46%, transparent 49%),
+    radial-gradient(ellipse 29% 15% at 66% 31%, #a4774d 0 35%, #5e824d 40%, transparent 45%),
+    radial-gradient(ellipse 17% 25% at 72% 62%, #6f934d 0 40%, transparent 45%),
+    radial-gradient(ellipse 13% 9% at 25% 72%, #9c8054 0 42%, transparent 47%);
+  filter: saturate(1.15);
+  mask-image: linear-gradient(135deg, #000 0%, #000 45%, transparent 78%);
+  mix-blend-mode: screen;
+}
+
+.earth-night {
+  background: linear-gradient(132deg, transparent 0%, transparent 38%, rgb(0 3 10 / 8%) 47%, rgb(0 2 8 / 62%) 62%, rgb(0 0 3 / 93%) 86%);
+  box-shadow: inset -24px -16px 28px rgb(0 0 0 / 70%);
+}
+
+.earth-rim {
+  background: linear-gradient(132deg, rgb(97 246 255 / 48%), transparent 35%, transparent 68%, rgb(0 0 0 / 35%) 91%);
+  mix-blend-mode: screen;
+  opacity: 0.85;
 }
 
 .earth-highlight {
-  background: radial-gradient(circle at 29% 27%, rgb(220 246 255 / 62%) 0%, rgb(139 215 255 / 24%) 13%, transparent 34%);
+  background: radial-gradient(circle at 20% 17%, #ffffff 0%, rgb(223 252 255 / 92%) 2.2%, rgb(139 229 255 / 48%) 8%, transparent 23%);
   mix-blend-mode: screen;
+}
+
+.earth-moon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 12.5%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(0deg) translateX(78%) rotate(0deg);
+  animation: moon-orbit 18s linear infinite;
+  box-shadow: 0 0 12px rgb(215 239 255 / 25%);
+  will-change: transform, opacity;
+}
+
+.moon-surface,
+.moon-craters {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.moon-surface {
+  background: linear-gradient(132deg, #eef6f2 0%, #b9c4c5 44%, #536069 72%, #171d25 100%);
+  box-shadow: inset -3px -2px 4px rgb(0 0 0 / 55%);
+}
+
+.moon-craters {
+  background:
+    radial-gradient(circle at 30% 60%, rgb(61 72 76 / 48%) 0 10%, transparent 12%),
+    radial-gradient(circle at 56% 36%, rgb(72 81 83 / 38%) 0 13%, transparent 15%),
+    radial-gradient(circle at 70% 66%, rgb(47 57 62 / 42%) 0 8%, transparent 10%);
+  mix-blend-mode: multiply;
 }
 
 .mission-control-canvas {
@@ -280,6 +335,14 @@
   0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
   50% { background-position: 42% 0, 54% 0, 48% 0, 56% 0, 0 0; }
   100% { background-position: 84% 0, 108% 0, 96% 0, 112% 0, 0 0; }
+}
+
+@keyframes moon-orbit {
+  0%, 20% { z-index: 2; opacity: 0.95; transform: translate(-50%, -50%) rotate(0deg) translateX(78%) rotate(0deg); }
+  24%, 70% { z-index: 0; opacity: 0.38; }
+  50% { transform: translate(-50%, -50%) rotate(180deg) translateX(78%) rotate(-180deg); }
+  74%, 100% { z-index: 2; opacity: 0.95; }
+  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(78%) rotate(-360deg); }
 }
 
 @keyframes signal-pulse {
@@ -979,7 +1042,7 @@
   .mission-control-scene { display: block; }
 
   .earth-orbit,
-  .earth-surface {
+  .earth-moon {
     animation: none;
   }
 

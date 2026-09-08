@@ -27,8 +27,15 @@ function useMotionMode() {
 function Earth() {
   return (
     <div className="earth-orbit" aria-hidden="true">
+      <div className="earth-moon">
+        <div className="moon-surface" />
+        <div className="moon-craters" />
+      </div>
       <div className="earth-sphere">
         <div className="earth-surface" />
+        <div className="earth-continents" />
+        <div className="earth-night" />
+        <div className="earth-rim" />
         <div className="earth-highlight" />
       </div>
     </div>

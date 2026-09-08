@@ -1,5 +1,6 @@
-import { MissionControlScene } from "./MissionControlScene";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
+
+const MissionControlScene = lazy(() => import("./MissionControlScene").then(({ MissionControlScene: scene }) => ({ default: scene })));
 
 type TwinkleStar = {
   id: number;
@@ -127,7 +128,9 @@ export function SkyBackdrop() {
   return (
     <>
       <AmbientStars />
-      <MissionControlScene />
+      <Suspense fallback={null}>
+        <MissionControlScene />
+      </Suspense>
       <div className="mission-control-dim" aria-hidden="true" />
     </>
   );

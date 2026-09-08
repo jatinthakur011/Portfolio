@@ -142,124 +142,19 @@
   will-change: transform;
 }
 
-.earth-sphere {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #1a5c8a;
-}
-
-.earth-surface,
-.earth-lighting,
-.earth-continent {
-  position: absolute;
+.earth-webgl-canvas {
+  position: absolute !important;
   inset: 0;
-  border-radius: inherit;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-.earth-surface {
-  background: #1a5c8a;
+.earth-webgl-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
-
-.earth-continent {
-  inset: auto;
-  background: #6f8d4d;
-  z-index: 1;
-  opacity: 0.96;
-}
-
-.earth-continent-one {
-  top: 17%;
-  left: 16%;
-  width: 31%;
-  height: 20%;
-  clip-path: polygon(4% 36%, 25% 8%, 57% 14%, 86% 0, 100% 36%, 79% 72%, 51% 64%, 32% 100%, 5% 78%);
-}
-
-.earth-continent-two {
-  top: 36%;
-  left: 24%;
-  width: 23%;
-  height: 35%;
-  background: #527b45;
-  clip-path: polygon(34% 0, 72% 14%, 100% 43%, 78% 67%, 83% 100%, 44% 84%, 10% 93%, 0 56%, 19% 30%);
-}
-
-.earth-continent-three {
-  top: 53%;
-  left: 10%;
-  width: 27%;
-  height: 19%;
-  background: #9a784c;
-  clip-path: polygon(0 32%, 28% 4%, 64% 18%, 91% 0, 100% 48%, 70% 77%, 40% 67%, 15% 100%);
-}
-
-.earth-continent-four {
-  top: 28%;
-  left: 48%;
-  width: 19%;
-  height: 15%;
-  background: #7c9651;
-  clip-path: polygon(0 38%, 25% 0, 67% 12%, 100% 50%, 77% 91%, 35% 100%, 13% 72%);
-}
-
-.earth-lighting {
-  z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 30% 30%, rgb(255 255 255 / 40%) 0%, transparent 40%),
-    radial-gradient(circle at 65% 65%, rgb(0 0 0 / 60%) 0%, transparent 70%);
-}
-
-.earth-glow {
-  position: absolute;
-  top: -4%;
-  left: -4%;
-  z-index: 0;
-  width: 58%;
-  height: 58%;
-  border-radius: 50%;
-  box-shadow: 0 0 30px 10px rgb(83 232 255 / 42%);
-  opacity: 0.9;
-}
-
-.earth-moon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-  width: 15%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  transform: translate(-50%, -50%) rotate(0deg) translateX(135%) rotate(0deg);
-  animation: moon-orbit 18s linear infinite;
-  box-shadow: 0 0 9px rgb(215 239 255 / 25%);
-  will-change: transform, opacity;
-}
-
-.moon-surface,
-.moon-crater {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-}
-
-.moon-surface {
-  background: linear-gradient(132deg, #e0e3df 0%, #aeb5b5 48%, #646b6e 78%, #343a3d 100%);
-  box-shadow: inset -3px -2px 4px rgb(0 0 0 / 55%);
-}
-
-.moon-crater {
-  background: #5f6668;
-  opacity: 0.65;
-}
-
-.moon-crater-one { inset: 22% auto auto 23%; width: 22%; height: 22%; }
-.moon-crater-two { inset: 54% auto auto 56%; width: 18%; height: 18%; }
-.moon-crater-three { inset: 60% auto auto 22%; width: 13%; height: 13%; }
 
 .mission-control-canvas {
   position: fixed !important;
@@ -364,11 +259,6 @@
   0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
   50% { background-position: 42% 0, 54% 0, 48% 0, 56% 0, 0 0; }
   100% { background-position: 84% 0, 108% 0, 96% 0, 112% 0, 0 0; }
-}
-
-@keyframes moon-orbit {
-  0%, 100% { opacity: 0.95; transform: translate(-50%, -50%) rotate(0deg) translateX(135%) rotate(0deg); }
-  50% { opacity: 0.72; transform: translate(-50%, -50%) rotate(180deg) translateX(135%) rotate(-180deg); }
 }
 
 @keyframes signal-pulse {
@@ -1067,8 +957,7 @@
 @media (prefers-reduced-motion: reduce) {
   .mission-control-scene { display: block; }
 
-  .earth-orbit,
-  .earth-moon {
+  .earth-orbit {
     animation: none;
   }
 

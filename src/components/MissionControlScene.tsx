@@ -29,14 +29,18 @@ function Earth() {
     <div className="earth-orbit" aria-hidden="true">
       <div className="earth-moon">
         <div className="moon-surface" />
-        <div className="moon-craters" />
+        <div className="moon-crater moon-crater-one" />
+        <div className="moon-crater moon-crater-two" />
+        <div className="moon-crater moon-crater-three" />
       </div>
+      <div className="earth-glow" />
       <div className="earth-sphere">
         <div className="earth-surface" />
-        <div className="earth-continents" />
-        <div className="earth-night" />
-        <div className="earth-rim" />
-        <div className="earth-highlight" />
+        <div className="earth-continent earth-continent-one" />
+        <div className="earth-continent earth-continent-two" />
+        <div className="earth-continent earth-continent-three" />
+        <div className="earth-continent earth-continent-four" />
+        <div className="earth-lighting" />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Icosahedron, MeshTransmissionMaterial, Stars } from "@react-three/drei";
-import { useReducedMotion } from "framer-motion";
+import { useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import * as THREE from "three";
 
@@ -35,14 +35,19 @@ function SceneObject() {
 }
 
 export function HeroScene() {
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sceneRef, { once: false, amount: 0.05 });
+
   return (
-    <div className="hero-scene" aria-hidden="true">
+    <div ref={sceneRef} className="hero-scene" aria-hidden="true">
       <Canvas camera={{ position: [0, 0, 5.2], fov: 38 }} dpr={[1, 1.5]} gl={{ alpha: true, antialias: true }}>
+        <color attach="background" args={["#030914"]} />
+        <fog attach="fog" args={["#030914", 4, 10]} />
         <ambientLight intensity={0.8} />
         <pointLight position={[3, 2, 4]} intensity={4} color="#2dd4bf" />
         <pointLight position={[-3, -1, 2]} intensity={2.5} color="#4f8dfd" />
         <Stars radius={7} depth={4} count={90} factor={1.4} saturation={0} fade speed={0.25} />
-        <SceneObject />
+        {isInView ? <SceneObject /> : null}
       </Canvas>
     </div>
   );

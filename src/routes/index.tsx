@@ -291,9 +291,17 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
     >
       <div className="project-flip-inner">
         <div className="project-face glow-card group flex flex-col p-8">
+          <motion.span
+            className="project-depth-shadow"
+            style={{
+              x: useTransform(springY, [-8, 8], [12, -12]),
+              y: useTransform(springX, [-8, 8], [-8, 8]),
+            }}
+            aria-hidden="true"
+          />
           <span className="project-flip-affordance" aria-hidden="true"><Rotate3D size={16} /></span>
-          <span className="absolute inset-x-0 top-0 h-[3px]" style={{ background: `linear-gradient(90deg, ${project.accent}, transparent 85%)` }} />
-          <div className="relative z-10 mb-5 flex h-12 w-12 items-center justify-center rounded-[0.85rem] border" style={{ background: `color-mix(in oklab, ${project.accent} 14%, transparent)`, borderColor: `color-mix(in oklab, ${project.accent} 32%, transparent)` }}>
+          <span className="project-depth-bar absolute inset-x-0 top-0 h-[3px]" style={{ background: `linear-gradient(90deg, ${project.accent}, transparent 85%)` }} />
+          <div className="project-depth-icon relative z-10 mb-5 flex h-12 w-12 items-center justify-center rounded-[0.85rem] border" style={{ background: `color-mix(in oklab, ${project.accent} 14%, transparent)`, borderColor: `color-mix(in oklab, ${project.accent} 32%, transparent)` }}>
             <svg viewBox="0 0 24 24" fill="none" stroke={project.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5.5 w-5.5" aria-hidden="true">{project.icon}</svg>
           </div>
           <p className="relative z-10 mb-2.5 font-mono text-[0.72rem] tracking-wider" style={{ color: project.accent }}>{project.kicker}</p>
@@ -352,9 +360,16 @@ function Portfolio() {
               <a
                 key={link.id}
                 href={`#${link.id}`}
-                className={`dock-link ${active === link.id ? "dock-link-active" : ""}`}
+                className="dock-link relative"
               >
-                {link.label}
+                {active === link.id ? (
+                  <motion.span
+                    layoutId="active-nav-pill"
+                    className="dock-link-active absolute inset-0 -z-0"
+                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                  />
+                ) : null}
+                <span className="relative z-10">{link.label}</span>
               </a>
             ))}
           </div>

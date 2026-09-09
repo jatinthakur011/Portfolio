@@ -268,6 +268,10 @@
   backdrop-filter: blur(16px);
 }
 
+.site-nav {
+  background: var(--background);
+}
+
 @utility dock-link {
   color: var(--ink-soft);
   font-size: 0.9rem;
@@ -691,15 +695,14 @@
 }
 
 .hero-scene {
-  position: absolute;
-  top: 5rem;
-  right: max(2vw, calc((100vw - 76rem) / 2));
-  width: min(32vw, 26rem);
-  height: min(32vw, 26rem);
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   opacity: 0.72;
   filter: drop-shadow(0 0 36px color-mix(in oklab, var(--signal) 18%, transparent));
-  transform: translate3d(0, var(--scroll-y, 0px), 0);
 }
 
 .cursor-glow {

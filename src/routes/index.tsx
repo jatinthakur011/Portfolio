@@ -354,7 +354,7 @@ function Portfolio() {
       <CursorGlow />
 
       <div className="relative z-10">
-        <nav className="sticky top-4 z-50 flex justify-center px-4">
+        <nav className="site-nav sticky top-4 z-50 flex justify-center px-4">
           <div className="glass-panel flex gap-1 rounded-full p-2 shadow-[0_10px_40px_oklch(0_0_0/0.4)]">
             {NAV_LINKS.map((link) => (
               <a

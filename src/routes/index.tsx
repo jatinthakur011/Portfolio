@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 import { SkyBackdrop } from "@/components/SkyBackdrop";
 import { PhotoFrame3D } from "@/components/PhotoFrame3D";
@@ -17,6 +17,8 @@ import {
   SOFT_SKILLS,
 } from "@/components/portfolio-data";
 import photoUrl from "@/assets/Photo.jpeg";
+
+const HeroScene = lazy(() => import("@/components/HeroScene").then((module) => ({ default: module.HeroScene })));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -262,6 +264,10 @@ function MagneticLink({ children, className, ...props }: React.ComponentProps<"a
 
 function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
   const [flipped, setFlipped] = useState(false);
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const springX = useSpring(tiltX, { stiffness: 180, damping: 22 });
+  const springY = useSpring(tiltY, { stiffness: 180, damping: 22 });
 
   return (
     <motion.article
@@ -269,7 +275,17 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
       whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: "easeOut" }}
-      onMouseMove={spotlight}
+      onMouseMove={(event) => {
+        spotlight(event);
+        const rect = event.currentTarget.getBoundingClientRect();
+        tiltX.set(((event.clientY - rect.top) / rect.height - 0.5) * -8);
+        tiltY.set(((event.clientX - rect.left) / rect.width - 0.5) * 8);
+      }}
+      onMouseLeave={() => {
+        tiltX.set(0);
+        tiltY.set(0);
+      }}
+      style={{ rotateX: springX, rotateY: springY, transformPerspective: 1200 }}
       className={`project-flip-shell ${flipped ? "is-flipped" : ""}`}
       onClick={() => setFlipped((value) => !value)}
     >
@@ -347,6 +363,9 @@ function Portfolio() {
         <div className="mx-auto max-w-5xl px-6">
           {/* HERO */}
           <section id="home" className="pt-16 pb-16 text-center sm:pt-24">
+            <Suspense fallback={null}>
+              <HeroScene />
+            </Suspense>
             <div className="hero-photo relative mx-auto mb-9 h-48 w-48">
               <span className="orbit-ring-outer" aria-hidden="true" />
               <span className="orbit-ring" aria-hidden="true" />

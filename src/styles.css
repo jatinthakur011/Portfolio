@@ -152,7 +152,7 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  transform: translate3d(calc(var(--mouse-x) * var(--parallax-x)), calc(var(--mouse-y) * var(--parallax-y)), 0);
+  transform: translate3d(calc(var(--mouse-x) * var(--parallax-x)), calc(var(--mouse-y) * var(--parallax-y) + var(--scroll-y, 0px)), 0);
   transition: transform 0.4s ease-out;
 }
 
@@ -690,6 +690,18 @@
     float-soft 6s ease-in-out 0.7s infinite;
 }
 
+.hero-scene {
+  position: absolute;
+  top: 5rem;
+  right: max(2vw, calc((100vw - 76rem) / 2));
+  width: min(32vw, 26rem);
+  height: min(32vw, 26rem);
+  pointer-events: none;
+  opacity: 0.72;
+  filter: drop-shadow(0 0 36px color-mix(in oklab, var(--signal) 18%, transparent));
+  transform: translate3d(0, var(--scroll-y, 0px), 0);
+}
+
 .cursor-glow {
   position: fixed;
   top: -42px;
@@ -901,6 +913,10 @@
   .cursor-glow,
   .photo-frame-desktop,
   .skills-sphere-desktop {
+    display: none;
+  }
+
+  .hero-scene {
     display: none;
   }
 

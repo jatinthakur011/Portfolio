@@ -100,6 +100,15 @@ function AmbientStars() {
     backgroundRef.current.style.setProperty("--mouse-y", `${y}`);
   }
 
+  useEffect(() => {
+    const updateScrollDepth = () => {
+      backgroundRef.current?.style.setProperty("--scroll-y", `${window.scrollY * 0.16}px`);
+    };
+    updateScrollDepth();
+    window.addEventListener("scroll", updateScrollDepth, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrollDepth);
+  }, []);
+
   return (
     <div ref={backgroundRef} className="sky-background" onPointerMove={handlePointerMove} aria-hidden="true">
       <div className="sky-glow sky-glow-left" />

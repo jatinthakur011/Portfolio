@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SkyBackdrop } from "@/components/SkyBackdrop";
 import { PhotoFrame3D } from "@/components/PhotoFrame3D";
@@ -17,8 +17,6 @@ import {
   SOFT_SKILLS,
 } from "@/components/portfolio-data";
 import photoUrl from "@/assets/Photo.jpeg";
-
-const HeroScene = lazy(() => import("@/components/HeroScene").then((module) => ({ default: module.HeroScene })));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -378,9 +376,6 @@ function Portfolio() {
         <div className="mx-auto max-w-5xl px-6">
           {/* HERO */}
           <section id="home" className="pt-16 pb-16 text-center sm:pt-24">
-            <Suspense fallback={null}>
-              <HeroScene />
-            </Suspense>
             <div className="hero-photo relative mx-auto mb-9 h-48 w-48">
               <span className="orbit-ring-outer" aria-hidden="true" />
               <span className="orbit-ring" aria-hidden="true" />

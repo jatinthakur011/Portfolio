@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
 import { lazy, Suspense, useEffect, useState } from "react";

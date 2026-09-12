@@ -1070,7 +1070,7 @@
 
 .project-flip-shell {
   display: flex;
-  min-height: max(480px, var(--project-card-min-height, 480px));
+  min-height: 480px;
   height: 100%;
   flex-direction: column;
   cursor: pointer;

@@ -388,7 +388,7 @@ function ProjectCard({
       style={
         {
           "--project-accent": project.accent,
-          "--project-card-min-height": `${project.cardMinHeight}px`,
+          minHeight: project.cardMinHeight,
           rotateX: springX,
           rotateY: springY,
           transformPerspective: 1200,

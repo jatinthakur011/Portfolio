@@ -375,31 +375,11 @@ function Portfolio() {
 
         <div className="mx-auto max-w-5xl px-6">
           {/* HERO */}
-          <section id="home" className="pt-16 pb-16 text-center sm:pt-24">
-            <div className="hero-photo relative mx-auto mb-9 h-48 w-48">
-              <span className="orbit-ring-outer" aria-hidden="true" />
-              <span className="orbit-ring" aria-hidden="true" />
-              <span
-                className="absolute -inset-2 rounded-full opacity-70 blur-md"
-                style={{
-                  background: "var(--gradient-aurora)",
-                  animation: "ring-spin 14s linear infinite",
-                }}
-                aria-hidden="true"
-              />
-              <div className="photo-frame-desktop">
-                <PhotoFrame3D photoUrl={photoUrl} />
-              </div>
-              <div className="photo-frame-mobile relative h-full w-full rounded-full bg-background p-1.5">
-                <img
-                  src={photoUrl}
-                  alt="Portrait of Jatin Thakur"
-                  className="h-full w-full rounded-full object-cover object-top"
-                  width={192}
-                  height={192}
-                />
-              </div>
+          <section id="home" className="cinematic-hero relative min-h-[calc(100vh-5rem)] overflow-hidden px-6 pt-28 pb-16 text-center sm:pt-36">
+            <div className="cinematic-portrait" aria-hidden="true">
+              <PhotoFrame3D photoUrl={photoUrl} />
             </div>
+            <div className="cinematic-hero-content relative z-10 mx-auto">
 
             <div
               className="reveal mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[0.8rem]"
@@ -502,6 +482,7 @@ function Portfolio() {
                   </span>
                 ))}
               </div>
+            </div>
             </div>
           </section>
 

@@ -742,12 +742,6 @@
   border-color: var(--signal);
 }
 
-.photo-frame-desktop {
-  position: absolute;
-  inset: -14px;
-  z-index: 2;
-}
-
 .photo-frame-3d {
   position: relative;
   width: 100%;
@@ -760,20 +754,19 @@
 .photo-frame-3d::before,
 .photo-frame-3d::after {
   position: absolute;
-  inset: 8%;
+  inset: 0;
   z-index: 3;
-  border-radius: 50%;
   content: "";
   pointer-events: none;
   mix-blend-mode: screen;
 }
 
 .photo-frame-3d::before {
-  background: linear-gradient(110deg, rgb(7 170 192 / 24%), transparent 48%);
+  background: linear-gradient(105deg, rgb(7 170 192 / 25%), transparent 42%);
 }
 
 .photo-frame-3d::after {
-  background: radial-gradient(circle at 82% 30%, rgb(255 143 75 / 42%), transparent 46%);
+  background: radial-gradient(ellipse at 76% 38%, rgb(255 143 75 / 44%), transparent 42%);
   filter: blur(2px);
 }
 
@@ -787,7 +780,7 @@
   inset: 5px;
   z-index: 1;
   border: 1px solid color-mix(in oklab, var(--signal) 62%, transparent);
-  border-radius: 50%;
+  border-radius: 1.5rem;
   box-shadow: inset 0 0 16px color-mix(in oklab, var(--primary) 42%, transparent), 0 0 20px color-mix(in oklab, var(--signal) 28%, transparent);
   pointer-events: none;
   transform: translateZ(26px);
@@ -803,6 +796,58 @@
 
 .photo-frame-mobile {
   display: none;
+}
+
+.cinematic-hero {
+  display: grid;
+  align-items: center;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  isolation: isolate;
+}
+
+.cinematic-hero::before,
+.cinematic-hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  pointer-events: none;
+}
+
+.cinematic-hero::before {
+  background:
+    linear-gradient(90deg, rgb(3 9 20 / 58%) 0%, rgb(3 9 20 / 14%) 44%, rgb(3 9 20 / 44%) 100%),
+    linear-gradient(0deg, var(--background) 0%, transparent 30%, rgb(3 9 20 / 18%) 100%);
+}
+
+.cinematic-hero::after {
+  background: radial-gradient(ellipse at 50% 44%, transparent 24%, rgb(3 9 20 / 54%) 100%);
+  mix-blend-mode: multiply;
+}
+
+.cinematic-portrait {
+  position: absolute;
+  inset: -12% -7% -10%;
+  z-index: 0;
+  opacity: 0.98;
+  filter: saturate(1.22) contrast(1.06) brightness(1.16) blur(0.15px);
+  transform: perspective(1200px) translateZ(0);
+}
+
+.cinematic-portrait .photo-frame-3d {
+  transform: scale(1.28);
+  filter: drop-shadow(-28px 0 42px rgb(10 158 190 / 42%)) drop-shadow(28px 0 44px rgb(255 119 63 / 32%));
+}
+
+.cinematic-hero-content {
+  max-width: 58rem;
+  text-shadow: 0 3px 28px rgb(0 0 0 / 42%);
+}
+
+.cinematic-hero-content .glass-panel {
+  background: rgb(3 9 20 / 34%);
+  backdrop-filter: blur(10px);
 }
 
 .skills-sphere-desktop {

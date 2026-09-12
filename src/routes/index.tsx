@@ -375,14 +375,13 @@ function Portfolio() {
 
         <div className="mx-auto max-w-5xl px-6">
           {/* HERO */}
-          <section id="home" className="cinematic-hero relative min-h-[calc(100vh-5rem)] overflow-hidden px-6 pt-28 pb-16 text-center sm:pt-36">
-            <div className="cinematic-portrait" aria-hidden="true">
+          <section id="home" className="relative overflow-hidden pt-16 pb-16 text-center sm:pt-24">
+            <div className="hero-portrait-layer" aria-hidden="true">
               <PhotoFrame3D photoUrl={photoUrl} />
             </div>
-            <div className="cinematic-hero-content relative z-10 mx-auto">
 
             <div
-              className="reveal mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[0.8rem]"
+              className="reveal relative z-10 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[0.8rem]"
               style={{
                 color: "var(--signal)",
                 borderColor:
@@ -403,7 +402,7 @@ function Portfolio() {
             </div>
 
             <h1
-              className="reveal mx-auto max-w-3xl text-[clamp(2.2rem,6vw,3.8rem)] leading-[1.05] font-bold tracking-tight"
+              className="reveal relative z-10 mx-auto max-w-3xl text-[clamp(2.2rem,6vw,3.8rem)] leading-[1.05] font-bold tracking-tight"
               style={{ animationDelay: "0.1s" }}
             >
               <span className="text-ink">Hi, I'm </span>
@@ -411,14 +410,14 @@ function Portfolio() {
             </h1>
 
             <p
-              className="reveal mt-4 text-lg font-semibold text-ink"
+              className="reveal relative z-10 mt-4 text-lg font-semibold text-ink"
               style={{ animationDelay: "0.15s" }}
             >
               Full-Stack Developer&nbsp; | &nbsp;DevOps Engineer
             </p>
 
             <div
-              className="reveal glass-panel mx-auto mt-8 max-w-xl px-5 py-4 text-left font-mono text-sm text-ink-soft"
+              className="reveal glass-panel relative z-10 mx-auto mt-8 max-w-xl px-5 py-4 text-left font-mono text-sm text-ink-soft"
               style={{ animationDelay: "0.2s" }}
             >
               <span style={{ color: "var(--signal)" }}>$</span>{" "}
@@ -430,7 +429,7 @@ function Portfolio() {
             </div>
 
             <div
-              className="reveal mt-8 flex flex-wrap justify-center gap-3.5"
+              className="reveal relative z-10 mt-8 flex flex-wrap justify-center gap-3.5"
               style={{ animationDelay: "0.25s" }}
             >
               <MagneticLink href="#projects" className="btn-solid">
@@ -451,7 +450,7 @@ function Portfolio() {
             </div>
 
             <div
-              className="reveal mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-3.5"
+              className="reveal relative z-10 mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-3.5"
               style={{ animationDelay: "0.3s" }}
             >
               {[
@@ -470,7 +469,7 @@ function Portfolio() {
               ))}
             </div>
 
-            <div className="marquee-mask reveal mt-12" style={{ animationDelay: "0.35s" }}>
+            <div className="marquee-mask reveal relative z-10 mt-12" style={{ animationDelay: "0.35s" }}>
               <div className="marquee-track">
                 {[...MARQUEE_TECH, ...MARQUEE_TECH].map((t, i) => (
                   <span
@@ -482,7 +481,6 @@ function Portfolio() {
                   </span>
                 ))}
               </div>
-            </div>
             </div>
           </section>
 

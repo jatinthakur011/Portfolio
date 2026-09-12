@@ -746,108 +746,122 @@
   position: relative;
   width: 100%;
   height: 100%;
+  perspective: 1200px;
   transform-style: preserve-3d;
-  filter: drop-shadow(0 0 22px rgb(13 150 176 / 42%)) drop-shadow(12px 10px 18px rgb(255 139 73 / 18%));
-  isolation: isolate;
+  will-change: transform;
 }
 
-.photo-frame-3d::before,
+.photo-depth-glow {
+  position: absolute;
+  inset: 18% 10% 4%;
+  z-index: 0;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(ellipse, rgb(17 182 208 / 52%) 0%, rgb(41 103 255 / 20%) 38%, transparent 72%);
+  filter: blur(28px);
+  opacity: 0.75;
+  transform: translateZ(-42px) scale(0.82);
+  animation: portrait-glow 5s ease-in-out infinite alternate;
+}
+
+.photo-float-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-style: preserve-3d;
+}
+
+.photo-cutout {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  clip-path: polygon(43% 0%, 57% 1%, 66% 7%, 70% 18%, 70% 31%, 76% 43%, 71% 53%, 86% 65%, 100% 83%, 100% 100%, 0% 100%, 0% 83%, 14% 66%, 29% 55%, 25% 44%, 30% 32%, 30% 18%, 35% 7%);
+  filter: saturate(1.1) contrast(1.08) brightness(1.08);
+  transform: translateZ(18px);
+  transform-style: preserve-3d;
+}
+
+@keyframes portrait-glow {
+  from { opacity: 0.58; transform: translateZ(-42px) scale(0.8); }
+  to { opacity: 0.88; transform: translateZ(-42px) scale(0.92); }
+}
+
+.hero-portrait-layer {
+  position: absolute;
+  top: 1rem;
+  right: 3%;
+  z-index: 0;
+  width: min(57vw, 660px);
+  height: min(78vh, 760px);
+  perspective: 1200px;
+  pointer-events: auto;
+}
+
+.hero-portrait-layer .photo-frame-3d {
+  transform-origin: center center;
+}
+
+.hero-portrait-layer::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--background) 0%, transparent 28%, transparent 76%, var(--background) 100%);
+  opacity: 0.36;
+}
+
 .photo-frame-3d::after {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 2;
   content: "";
   pointer-events: none;
+  background: linear-gradient(105deg, rgb(7 170 192 / 16%), transparent 44%, rgb(255 143 75 / 18%));
   mix-blend-mode: screen;
-}
-
-.photo-frame-3d::before {
-  background: linear-gradient(105deg, rgb(7 170 192 / 25%), transparent 42%);
-}
-
-.photo-frame-3d::after {
-  background: radial-gradient(ellipse at 76% 38%, rgb(255 143 75 / 44%), transparent 42%);
-  filter: blur(2px);
-}
-
-.photo-frame-3d canvas {
-  position: relative;
-  z-index: 2;
-}
-
-.photo-frame-rim {
-  position: absolute;
-  inset: 5px;
-  z-index: 1;
-  border: 1px solid color-mix(in oklab, var(--signal) 62%, transparent);
-  border-radius: 1.5rem;
-  box-shadow: inset 0 0 16px color-mix(in oklab, var(--primary) 42%, transparent), 0 0 20px color-mix(in oklab, var(--signal) 28%, transparent);
-  pointer-events: none;
-  transform: translateZ(26px);
-}
-
-.photo-frame-photo-layer {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  transform: translateZ(12px);
-  transform-style: preserve-3d;
 }
 
 .photo-frame-mobile {
   display: none;
 }
 
-.cinematic-hero {
-  display: grid;
-  align-items: center;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  isolation: isolate;
+/* Keep the star field visible around the portrait instead of creating a panel. */
+.hero-portrait-layer + * {
+  position: relative;
 }
 
-.cinematic-hero::before,
-.cinematic-hero::after {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  content: "";
-  pointer-events: none;
-}
-
-.cinematic-hero::before {
-  background:
-    linear-gradient(90deg, rgb(3 9 20 / 58%) 0%, rgb(3 9 20 / 14%) 44%, rgb(3 9 20 / 44%) 100%),
-    linear-gradient(0deg, var(--background) 0%, transparent 30%, rgb(3 9 20 / 18%) 100%);
-}
-
-.cinematic-hero::after {
-  background: radial-gradient(ellipse at 50% 44%, transparent 24%, rgb(3 9 20 / 54%) 100%);
-  mix-blend-mode: multiply;
-}
-
-.cinematic-portrait {
-  position: absolute;
-  inset: -12% -7% -10%;
-  z-index: 0;
-  opacity: 0.98;
-  filter: saturate(1.22) contrast(1.06) brightness(1.16) blur(0.15px);
-  transform: perspective(1200px) translateZ(0);
-}
-
-.cinematic-portrait .photo-frame-3d {
-  transform: scale(1.28);
-  filter: drop-shadow(-28px 0 42px rgb(10 158 190 / 42%)) drop-shadow(28px 0 44px rgb(255 119 63 / 32%));
-}
-
+/* The old full-bleed cinematic treatment is intentionally disabled. */
+.cinematic-hero,
+.cinematic-portrait,
 .cinematic-hero-content {
-  max-width: 58rem;
-  text-shadow: 0 3px 28px rgb(0 0 0 / 42%);
+  display: contents;
 }
 
-.cinematic-hero-content .glass-panel {
-  background: rgb(3 9 20 / 34%);
-  backdrop-filter: blur(10px);
+@media (max-width: 767px) {
+  .hero-portrait-layer {
+    top: 3.5rem;
+    right: 4%;
+    width: 92vw;
+    height: 66vh;
+    opacity: 0.48;
+  }
+
+  .hero-portrait-layer::after {
+    opacity: 0.6;
+  }
+}
+
+/* Ensure the glow stays soft at smaller sizes. */
+.photo-depth-glow::after {
+  content: "";
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  background: rgb(255 144 79 / 18%);
+  filter: blur(2px);
 }
 
 .skills-sphere-desktop {

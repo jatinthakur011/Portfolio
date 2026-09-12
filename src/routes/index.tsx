@@ -16,7 +16,7 @@ import {
   SKILL_GROUPS,
   SOFT_SKILLS,
 } from "@/components/portfolio-data";
-import photoUrl from "@/assets/Photo.jpeg";
+import photoUrl from "@/assets/Photo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({

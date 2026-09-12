@@ -17,8 +17,8 @@ function PhotoPlane({ photoUrl }: { photoUrl: string }) {
 
   return (
     <mesh ref={mesh}>
-      <circleGeometry args={[1.35, 64]} />
-      <meshStandardMaterial map={texture} roughness={0.72} metalness={0.08} />
+      <circleGeometry args={[1.35, 96]} />
+      <meshStandardMaterial map={texture} roughness={0.6} metalness={0.12} />
     </mesh>
   );
 }
@@ -50,14 +50,29 @@ export function PhotoFrame3D({ photoUrl }: { photoUrl: string }) {
       <motion.div className="photo-frame-rim" style={{ x: useTransform(springY, [-12, 12], [-8, 8]), y: useTransform(springX, [-12, 12], [8, -8]) }} />
       <motion.div className="photo-frame-photo-layer" style={{ x: photoX, y: photoY }}>
         <Canvas camera={{ position: [0, 0, 4.4], fov: 42 }} dpr={[1, 1.5]} gl={{ alpha: true, antialias: true }}>
-          <ambientLight intensity={1.6} />
-          <pointLight position={[2, 2, 3]} intensity={4} color="#4f8dfd" />
-          <pointLight position={[-2, -1, 2]} intensity={2.5} color="#8ff4d0" />
-          <Float speed={1.3} rotationIntensity={0.08} floatIntensity={0.14}>
+          <CinematicCamera reducedMotion={Boolean(reducedMotion)} />
+          <ambientLight intensity={0.8} color="#173d58" />
+          <pointLight position={[2.4, 1.4, 3]} intensity={5.2} color="#1689a5" />
+          <pointLight position={[-2.2, 0.4, 2.4]} intensity={4.2} color="#ff9c58" />
+          <spotLight position={[0, 2.5, 4]} angle={0.45} penumbra={0.9} intensity={2.8} color="#fff1dc" />
+          <Float speed={reducedMotion ? 0 : 1.1} rotationIntensity={0.05} floatIntensity={reducedMotion ? 0 : 0.1}>
             <PhotoPlane photoUrl={photoUrl} />
           </Float>
         </Canvas>
       </motion.div>
     </motion.div>
   );
+}
+
+function CinematicCamera({ reducedMotion }: { reducedMotion: boolean }) {
+  useFrame(({ camera, clock }) => {
+    if (reducedMotion) return;
+    const orbit = clock.getElapsedTime() * ((Math.PI * 2) / 3);
+    camera.position.x = Math.sin(orbit) * 0.16;
+    camera.position.y = 0.08 + Math.sin(orbit * 0.5) * 0.04;
+    camera.position.z = 4.4 + Math.cos(orbit) * 0.05;
+    camera.lookAt(0, 0.04, 0);
+  });
+
+  return null;
 }

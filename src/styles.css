@@ -961,53 +961,58 @@
   }
 }
 
-.skills-sphere-desktop {
-  height: 430px;
-  margin: -24px auto 10px;
-  max-width: 760px;
+.skills-grid {
+  margin-top: 2rem;
 }
 
-.skills-sphere-wrap,
-.skills-sphere-wrap canvas {
-  width: 100%;
-  height: 100%;
+.skill-category {
+  --skill-accent: var(--primary);
+  opacity: 0;
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.sphere-skill-pill {
-  display: inline-flex;
+.skill-category-backend {
+  --skill-accent: oklch(0.72 0.16 145);
+}
+
+.skill-category-devops {
+  --skill-accent: var(--signal);
+}
+
+.skill-category-programming-languages {
+  --skill-accent: oklch(0.72 0.16 305);
+}
+
+.skill-category:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.skill-category:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.skill-category:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.skill-category-heading {
+  display: flex;
   align-items: center;
-  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
-  border-radius: 999px;
-  padding: 0.42rem 0.78rem;
-  background: color-mix(in oklab, var(--primary) 14%, var(--background));
-  color: color-mix(in oklab, var(--primary) 55%, white);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  white-space: nowrap;
-  cursor: grab;
+  gap: 0.55rem;
+  color: var(--skill-accent);
+}
+
+.skill-pill {
   transition:
     transform 0.2s ease,
+    border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-.sphere-skill-pill:hover {
-  transform: scale(1.12);
-  box-shadow: 0 0 18px color-mix(in oklab, var(--primary) 38%, transparent);
-}
-
-.skills-sphere-legend {
-  display: flex;
-  justify-content: center;
-  gap: 1.4rem;
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.skills-sphere-legend .legend-signal {
-  color: var(--signal);
+.skill-pill:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--skill-accent) 58%, transparent);
+  box-shadow: 0 0 18px -5px var(--skill-accent);
 }
 
 .education-timeline-progress {
@@ -1376,8 +1381,7 @@
 
 @media (max-width: 767px), (prefers-reduced-motion: reduce) {
   .cursor-glow,
-  .photo-frame-desktop,
-  .skills-sphere-desktop {
+  .photo-frame-desktop {
     display: none;
   }
 
@@ -1394,13 +1398,8 @@
     animation: none;
   }
 
-  .photo-frame-mobile,
-  .skills-grid-mobile {
+  .photo-frame-mobile {
     display: block;
-  }
-
-  .skills-grid-mobile {
-    display: grid;
   }
 }
 

@@ -7,7 +7,18 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowUp, BookOpen, Copy, GraduationCap, Rotate3D, School } from "lucide-react";
+import {
+  ArrowUp,
+  BookOpen,
+  Code2,
+  Container,
+  Copy,
+  GraduationCap,
+  Monitor,
+  Rotate3D,
+  School,
+  Server,
+} from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { FaAws } from "react-icons/fa";
@@ -25,7 +36,6 @@ import type { IconType } from "react-icons";
 
 import { SkyBackdrop } from "@/components/SkyBackdrop";
 import { PhotoFrame3D } from "@/components/PhotoFrame3D";
-import { SkillsSphere } from "@/components/SkillsSphere";
 import {
   ABOUT_CARDS,
   CONTACTS,
@@ -33,9 +43,20 @@ import {
   NAV_LINKS,
   PROJECTS,
   SKILL_GROUPS,
-  SOFT_SKILLS,
 } from "@/components/portfolio-data";
 import photoUrl from "@/assets/Photo.png";
+
+const SKILL_CATEGORY_ICONS = {
+  Frontend: Monitor,
+  Backend: Server,
+  DevOps: Container,
+  "Programming Languages": Code2,
+};
+
+function SkillCategoryIcon({ title }: { title: string }) {
+  const Icon = SKILL_CATEGORY_ICONS[title as keyof typeof SKILL_CATEGORY_ICONS];
+  return <Icon aria-hidden="true" size={16} strokeWidth={2} />;
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -879,10 +900,7 @@ function Portfolio() {
           <section id="skills" className="pt-24 pb-10">
             <SectionHeading eyebrow="04 — toolbox" title="My Skills" />
 
-            <div className="skills-sphere-desktop">
-              <SkillsSphere groups={SKILL_GROUPS} />
-            </div>
-            <div className="skills-grid-mobile grid gap-11 sm:grid-cols-2 sm:gap-x-14">
+            <div className="skills-grid grid gap-11 sm:grid-cols-2 sm:gap-x-14">
               {SKILL_GROUPS.map((group, index) => (
                 <motion.div
                   key={group.title}
@@ -890,15 +908,17 @@ function Portfolio() {
                   whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
                   transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                  className={`skill-category skill-category-${group.title.toLowerCase().replaceAll(" ", "-")} reveal`}
                 >
-                  <h4 className="mb-4 text-sm font-semibold tracking-[0.08em] text-ink-dim uppercase">
+                  <h4 className="skill-category-heading mb-4 text-sm font-semibold tracking-[0.08em] text-ink-dim uppercase">
+                    <SkillCategoryIcon title={group.title} />
                     {group.title}
                   </h4>
                   <div className="flex flex-wrap gap-2.5">
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className={`chip ${group.variant === "signal" ? "chip-signal" : ""}`}
+                        className={`chip skill-pill ${group.variant === "signal" ? "chip-signal" : ""}`}
                       >
                         {item}
                       </span>
@@ -906,19 +926,6 @@ function Portfolio() {
                   </div>
                 </motion.div>
               ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <h4 className="mb-4 text-sm font-semibold tracking-[0.08em] text-ink-dim uppercase">
-                Soft Skills
-              </h4>
-              <div className="flex flex-wrap justify-center gap-2.5">
-                {SOFT_SKILLS.map((skill) => (
-                  <span key={skill} className="chip chip-plain">
-                    {skill}
-                  </span>
-                ))}
-              </div>
             </div>
           </section>
 

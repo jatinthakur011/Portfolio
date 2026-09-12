@@ -173,8 +173,6 @@ export const SKILL_GROUPS = [
   },
 ];
 
-export const SOFT_SKILLS = ["Teamwork", "Adaptability", "Leadership"];
-
 export const CONTACTS = [
   {
     glyph: "✉",

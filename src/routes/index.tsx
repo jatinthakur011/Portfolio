@@ -499,45 +499,28 @@ function ShowcaseProjectCard({
   index: number;
   className?: string;
 }) {
-  const meshOrigins = ["18% 16%", "84% 12%", "18% 82%", "82% 78%", "50% 16%"];
-
   return (
-    <motion.article
+    <motion.a
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
       className={`project-showcase-card ${className}`}
+      href={project.href}
+      target="_blank"
+      rel="noopener noreferrer"
       style={
         {
           "--project-accent": project.accent,
-          "--project-mesh-origin": meshOrigins[index] ?? "50% 50%",
         } as React.CSSProperties
       }
     >
       <img
         src={project.image}
-        alt=""
+        alt={`${project.title} project preview`}
         className="project-showcase-image"
-        aria-hidden="true"
-        onError={(event) => {
-          event.currentTarget.style.display = "none";
-        }}
       />
-      <div className="project-showcase-content">
-        <p className="project-showcase-tags">{project.tags.join(" · ")}</p>
-        <h3>{project.title}</h3>
-        <p className="project-showcase-description">{project.description}</p>
-        <a
-          href={project.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-solid project-showcase-button"
-        >
-          View Project →
-        </a>
-      </div>
-    </motion.article>
+    </motion.a>
   );
 }
 
@@ -881,13 +864,12 @@ function Portfolio() {
               subtitle="A mix of applications I've built and infrastructure I've automated."
             />
 
-            <div className="project-showcase-grid grid gap-6 md:grid-cols-2 lg:grid-cols-6">
+            <div className="project-showcase-grid">
               {PROJECTS.map((project, index) => (
                 <ShowcaseProjectCard
                   key={project.title}
                   project={project}
                   index={index}
-                  className={`lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}
                 />
               ))}
             </div>

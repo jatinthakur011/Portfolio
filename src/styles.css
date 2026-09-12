@@ -755,8 +755,22 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  mask-image: radial-gradient(ellipse 65% 70% at center, black 50%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 65% 70% at center, black 50%, transparent 100%);
+  mask-image: radial-gradient(
+    ellipse 78% 84% at 50% 42%,
+    black 0%,
+    black 52%,
+    rgb(0 0 0 / 78%) 68%,
+    rgb(0 0 0 / 28%) 84%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 84% at 50% 42%,
+    black 0%,
+    black 52%,
+    rgb(0 0 0 / 78%) 68%,
+    rgb(0 0 0 / 28%) 84%,
+    transparent 100%
+  );
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: 100% 100%;

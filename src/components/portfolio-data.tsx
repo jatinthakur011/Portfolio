@@ -61,6 +61,7 @@ export const PROJECTS = [
     description:
       "A real-time chat app containerised with Docker and deployed on Kubernetes to practice orchestration and scaling.",
     tags: ["Docker", "Kubernetes", "Jenkins", "AWS"],
+    pipeline: ["Build", "Test", "Deploy"],
     href: "https://github.com/jatinthakur011/chatapp-k8s",
     icon: (
       <>
@@ -76,6 +77,7 @@ export const PROJECTS = [
     description:
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
     tags: ["React", "Node.js", "MongoDB"],
+    pipeline: ["Build", "Test", "Deploy"],
     href: "https://github.com/jatinthakur011/HealthHub",
     icon: <path d="M2 12h4l2-6 4 12 2-8 2 4h6" />,
   },
@@ -86,6 +88,7 @@ export const PROJECTS = [
     description:
       "A web app for HR operations — secure auth, attendance, salary, task assignment, leave management, and real-time communication.",
     tags: ["React", "Node.js", "MongoDB", "JWT"],
+    pipeline: ["Build", "Test", "Deploy"],
     href: "https://github.com/jatinthakur011/employee_management_system",
     icon: (
       <>
@@ -93,6 +96,38 @@ export const PROJECTS = [
         <rect x="14" y="4" width="7" height="7" rx="1.5" />
         <rect x="3" y="15" width="7" height="5" rx="1.5" />
         <rect x="14" y="13" width="7" height="7" rx="1.5" />
+      </>
+    ),
+  },
+  {
+    accent: "oklch(0.77 0.15 155)",
+    kicker: "// LINUX · SERVER PROVISIONING",
+    title: "Automated Linux Server Provisioning & Security Hardening",
+    description:
+      "Bash automation that takes a fresh Ubuntu server and applies a repeatable baseline — admin user setup, Nginx deployment, UFW firewall rules, SSH hardening, and automatic security updates, replacing manual server configuration with one repeatable script.",
+    tags: ["Bash", "Linux", "Nginx", "UFW", "SSH Hardening"],
+    pipeline: ["Provision", "Harden", "Validate"],
+    href: "https://github.com/jatinthakur011/linux-server-provisioning-hardening",
+    icon: (
+      <>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="m7 9 2 2-2 2M11 14h5" />
+      </>
+    ),
+  },
+  {
+    accent: "oklch(0.71 0.15 235)",
+    kicker: "// DEVOPS · MONITORING & AUTO-RECOVERY",
+    title: "Linux Server Monitoring & Auto-Recovery",
+    description:
+      "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage, and critical services (Nginx, SSH), logs health data, and automatically detects and recovers from Nginx failures — scheduled via Cron every 5 minutes, demonstrating basic self-healing infrastructure.",
+    tags: ["Bash", "AWS EC2", "Cron", "Nginx", "Auto-Recovery"],
+    pipeline: ["Monitor", "Detect", "Recover"],
+    href: "https://github.com/jatinthakur011/linux-server-monitoring",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="8" />
+        <path d="M12 7v5l3 2M5 5l2 2M17 5l-2 2" />
       </>
     ),
   },

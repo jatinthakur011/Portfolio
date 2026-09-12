@@ -260,7 +260,7 @@ function MagneticLink({ children, className, ...props }: React.ComponentProps<"a
   );
 }
 
-function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
+function ProjectCard({ project, index, className = "" }: { project: (typeof PROJECTS)[number]; index: number; className?: string }) {
   const [flipped, setFlipped] = useState(false);
   const tiltX = useMotionValue(0);
   const tiltY = useMotionValue(0);
@@ -284,7 +284,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
         tiltY.set(0);
       }}
       style={{ rotateX: springX, rotateY: springY, transformPerspective: 1200 }}
-      className={`project-flip-shell ${flipped ? "is-flipped" : ""}`}
+      className={`project-flip-shell ${flipped ? "is-flipped" : ""} ${className}`}
       onClick={() => setFlipped((value) => !value)}
     >
       <div className="project-flip-inner">
@@ -314,8 +314,8 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
           <span className="project-flip-affordance" aria-hidden="true"><Rotate3D size={16} /></span>
           <p className="eyebrow mb-4">// deployment pipeline</p>
           <h3 className="mb-6 text-xl text-ink">Ship it cleanly</h3>
-          <div className="pipeline" aria-label="Build, Test, Deploy pipeline">
-            {["Build", "Test", "Deploy"].map((stage) => <span key={stage} className="pipeline-stage">{stage}</span>)}
+          <div className="pipeline" aria-label={`${project.pipeline.join(", ")} pipeline`}>
+            {project.pipeline.map((stage) => <span key={stage} className="pipeline-stage">{stage}</span>)}
           </div>
           <div className="mt-8 flex flex-wrap gap-2">
             {project.tags.map((tag) => <span key={tag} className="chip px-3 py-1 text-xs">{tag}</span>)}
@@ -637,8 +637,15 @@ function Portfolio() {
               subtitle="A mix of applications I've built and infrastructure I've automated."
             />
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {PROJECTS.map((project, index) => <ProjectCard key={project.title} project={project} index={index} />)}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-6">
+              {PROJECTS.map((project, index) => (
+                <ProjectCard
+                  key={project.title}
+                  project={project}
+                  index={index}
+                  className={`lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}
+                />
+              ))}
             </div>
           </section>
 

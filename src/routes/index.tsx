@@ -3,6 +3,18 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
+import {
+  SiAmazonwebservices,
+  SiDocker,
+  SiGnubash,
+  SiKubernetes,
+  SiLinux,
+  SiMongodb,
+  SiNginx,
+  SiNodedotjs,
+  SiReact,
+} from "react-icons/si";
+import type { IconType } from "react-icons";
 
 import { SkyBackdrop } from "@/components/SkyBackdrop";
 import { PhotoFrame3D } from "@/components/PhotoFrame3D";
@@ -260,6 +272,30 @@ function MagneticLink({ children, className, ...props }: React.ComponentProps<"a
   );
 }
 
+const PROJECT_TECH_ICONS: Record<string, IconType> = {
+  Docker: SiDocker,
+  Kubernetes: SiKubernetes,
+  AWS: SiAmazonwebservices,
+  "AWS EC2": SiAmazonwebservices,
+  React: SiReact,
+  "Node.js": SiNodedotjs,
+  MongoDB: SiMongodb,
+  Nginx: SiNginx,
+  Linux: SiLinux,
+  Bash: SiGnubash,
+};
+
+function ProjectTag({ tag }: { tag: string }) {
+  const Icon = PROJECT_TECH_ICONS[tag];
+
+  return (
+    <span className="chip project-tech-tag px-3 py-1 text-xs">
+      {Icon ? <Icon aria-hidden="true" /> : null}
+      {tag}
+    </span>
+  );
+}
+
 function ProjectCard({ project, index, className = "" }: { project: (typeof PROJECTS)[number]; index: number; className?: string }) {
   const [flipped, setFlipped] = useState(false);
   const tiltX = useMotionValue(0);
@@ -283,12 +319,12 @@ function ProjectCard({ project, index, className = "" }: { project: (typeof PROJ
         tiltX.set(0);
         tiltY.set(0);
       }}
-      style={{ rotateX: springX, rotateY: springY, transformPerspective: 1200 }}
+      style={{ "--project-accent": project.accent, rotateX: springX, rotateY: springY, transformPerspective: 1200 } as React.CSSProperties}
       className={`project-flip-shell ${flipped ? "is-flipped" : ""} ${className}`}
       onClick={() => setFlipped((value) => !value)}
     >
       <div className="project-flip-inner">
-        <div className="project-face glow-card group flex flex-col p-8">
+        <div className="project-face project-card-surface glow-card group flex flex-col p-8">
           <motion.span
             className="project-depth-shadow"
             style={{
@@ -297,28 +333,30 @@ function ProjectCard({ project, index, className = "" }: { project: (typeof PROJ
             }}
             aria-hidden="true"
           />
-          <span className="project-flip-affordance" aria-hidden="true"><Rotate3D size={16} /></span>
-          <span className="project-depth-bar absolute inset-x-0 top-0 h-[3px]" style={{ background: `linear-gradient(90deg, ${project.accent}, transparent 85%)` }} />
+          <span className={`project-flip-affordance ${project.featured ? "right-24" : ""}`} aria-hidden="true"><Rotate3D size={16} /></span>
+          {project.featured ? <span className="project-featured-chip">Featured</span> : null}
+          <span className="project-depth-bar absolute inset-x-0 top-0 h-1" />
           <div className="project-depth-icon relative z-10 mb-5 flex h-12 w-12 items-center justify-center rounded-[0.85rem] border" style={{ background: `color-mix(in oklab, ${project.accent} 14%, transparent)`, borderColor: `color-mix(in oklab, ${project.accent} 32%, transparent)` }}>
             <svg viewBox="0 0 24 24" fill="none" stroke={project.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5.5 w-5.5" aria-hidden="true">{project.icon}</svg>
           </div>
-          <p className="relative z-10 mb-2.5 font-mono text-[0.72rem] tracking-wider" style={{ color: project.accent }}>{project.kicker}</p>
+          <p className="project-category relative z-10 mb-2.5 font-mono" style={{ color: project.accent }}>{project.kicker}</p>
           <h3 className="relative z-10 mb-3 text-xl text-ink">{project.title}</h3>
           <p className="relative z-10 mb-6 grow text-sm leading-relaxed text-ink-soft">{project.description}</p>
           <div className="relative z-10 mb-6 flex flex-wrap gap-2">
-            {project.tags.map((tag) => <span key={tag} className="chip px-3 py-1 text-xs">{tag}</span>)}
+            {project.tags.map((tag) => <ProjectTag key={tag} tag={tag} />)}
           </div>
           <a href={project.href} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className="btn-solid relative z-10 self-start py-2.5 text-sm">View Project →</a>
         </div>
-        <div className="project-face project-face-back glow-card p-8">
+        <div className="project-face project-face-back project-card-surface glow-card p-8">
           <span className="project-flip-affordance" aria-hidden="true"><Rotate3D size={16} /></span>
+          <span className="project-depth-bar absolute inset-x-0 top-0 h-1" />
           <p className="eyebrow mb-4">// deployment pipeline</p>
           <h3 className="mb-6 text-xl text-ink">Ship it cleanly</h3>
           <div className="pipeline" aria-label={`${project.pipeline.join(", ")} pipeline`}>
             {project.pipeline.map((stage) => <span key={stage} className="pipeline-stage">{stage}</span>)}
           </div>
           <div className="mt-8 flex flex-wrap gap-2">
-            {project.tags.map((tag) => <span key={tag} className="chip px-3 py-1 text-xs">{tag}</span>)}
+            {project.tags.map((tag) => <ProjectTag key={tag} tag={tag} />)}
           </div>
           <p className="mt-auto pt-8 font-mono text-xs text-ink-dim">click to return</p>
         </div>
@@ -643,7 +681,7 @@ function Portfolio() {
                   key={project.title}
                   project={project}
                   index={index}
-                  className={`lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}
+                  className={project.featured ? "lg:col-span-4" : "lg:col-span-2"}
                 />
               ))}
             </div>

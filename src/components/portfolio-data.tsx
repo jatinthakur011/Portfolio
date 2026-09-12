@@ -78,6 +78,7 @@ export const PROJECTS = [
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
     tags: ["React", "Node.js", "MongoDB"],
     pipeline: ["Build", "Test", "Deploy"],
+    featured: true,
     href: "https://github.com/jatinthakur011/HealthHub",
     icon: <path d="M2 12h4l2-6 4 12 2-8 2 4h6" />,
   },

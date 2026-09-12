@@ -3,8 +3,8 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import { ArrowUp, Copy, Rotate3D } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
+import { FaAws } from "react-icons/fa";
 import {
-  SiAmazonwebservices,
   SiDocker,
   SiGnubash,
   SiKubernetes,
@@ -275,8 +275,8 @@ function MagneticLink({ children, className, ...props }: React.ComponentProps<"a
 const PROJECT_TECH_ICONS: Record<string, IconType> = {
   Docker: SiDocker,
   Kubernetes: SiKubernetes,
-  AWS: SiAmazonwebservices,
-  "AWS EC2": SiAmazonwebservices,
+  AWS: FaAws,
+  "AWS EC2": FaAws,
   React: SiReact,
   "Node.js": SiNodedotjs,
   MongoDB: SiMongodb,

@@ -746,30 +746,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  perspective: 1200px;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.photo-depth-glow {
-  position: absolute;
-  inset: 18% 10% 4%;
-  z-index: 0;
-  border-radius: 50%;
-  content: "";
   pointer-events: none;
-  background: radial-gradient(ellipse, rgb(17 182 208 / 52%) 0%, rgb(41 103 255 / 20%) 38%, transparent 72%);
-  filter: blur(28px);
-  opacity: 0.75;
-  transform: translateZ(-42px) scale(0.82);
-  animation: portrait-glow 5s ease-in-out infinite alternate;
-}
-
-.photo-float-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  transform-style: preserve-3d;
 }
 
 .photo-cutout {
@@ -778,15 +755,12 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  clip-path: polygon(43% 0%, 57% 1%, 66% 7%, 70% 18%, 70% 31%, 76% 43%, 71% 53%, 86% 65%, 100% 83%, 100% 100%, 0% 100%, 0% 83%, 14% 66%, 29% 55%, 25% 44%, 30% 32%, 30% 18%, 35% 7%);
-  filter: saturate(1.1) contrast(1.08) brightness(1.08);
-  transform: translateZ(18px);
-  transform-style: preserve-3d;
-}
-
-@keyframes portrait-glow {
-  from { opacity: 0.58; transform: translateZ(-42px) scale(0.8); }
-  to { opacity: 0.88; transform: translateZ(-42px) scale(0.92); }
+  mask-image: radial-gradient(ellipse 72% 84% at 50% 48%, black 48%, rgb(0 0 0 / 0.94) 66%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 72% 84% at 50% 48%, black 48%, rgb(0 0 0 / 0.94) 66%, transparent 100%);
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
 }
 
 .hero-portrait-layer {
@@ -801,43 +775,7 @@
 }
 
 .hero-portrait-layer .photo-frame-3d {
-  transform-origin: center center;
-}
-
-.hero-portrait-layer::after {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  content: "";
-  pointer-events: none;
-  background: linear-gradient(90deg, var(--background) 0%, transparent 28%, transparent 76%, var(--background) 100%);
-  opacity: 0.36;
-}
-
-.photo-frame-3d::after {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  content: "";
-  pointer-events: none;
-  background: linear-gradient(105deg, rgb(7 170 192 / 16%), transparent 44%, rgb(255 143 75 / 18%));
-  mix-blend-mode: screen;
-}
-
-.photo-frame-mobile {
-  display: none;
-}
-
-/* Keep the star field visible around the portrait instead of creating a panel. */
-.hero-portrait-layer + * {
-  position: relative;
-}
-
-/* The old full-bleed cinematic treatment is intentionally disabled. */
-.cinematic-hero,
-.cinematic-portrait,
-.cinematic-hero-content {
-  display: contents;
+  transform: none;
 }
 
 @media (max-width: 767px) {
@@ -849,19 +787,6 @@
     opacity: 0.48;
   }
 
-  .hero-portrait-layer::after {
-    opacity: 0.6;
-  }
-}
-
-/* Ensure the glow stays soft at smaller sizes. */
-.photo-depth-glow::after {
-  content: "";
-  position: absolute;
-  inset: 20%;
-  border-radius: 50%;
-  background: rgb(255 144 79 / 18%);
-  filter: blur(2px);
 }
 
 .skills-sphere-desktop {

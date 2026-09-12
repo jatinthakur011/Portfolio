@@ -48,10 +48,7 @@ export const EDUCATION = [
     school: "Radha Krishna Sr. Sec. School, Ghandalwin, Bilaspur",
     result: "Percentage: 81%",
     accent: "var(--primary)",
-    highlights: [
-      "PCM — Physics, Chemistry & Mathematics",
-      "Computer Science",
-    ],
+    highlights: ["PCM — Physics, Chemistry & Mathematics", "Computer Science"],
   },
   {
     year: "2019 - 2020",
@@ -162,16 +159,7 @@ export const SKILL_GROUPS = [
   {
     title: "DevOps",
     variant: "signal" as const,
-    items: [
-      "Docker",
-      "Kubernetes",
-      "Jenkins",
-      "Terraform",
-      "Ansible",
-      "AWS",
-      "Git",
-      "Vercel",
-    ],
+    items: ["Docker", "Kubernetes", "Jenkins", "Terraform", "Ansible", "AWS", "Git", "Vercel"],
   },
   {
     title: "Programming Languages",

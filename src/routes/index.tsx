@@ -490,6 +490,48 @@ function ProjectCard({
   );
 }
 
+function ShowcaseProjectCard({
+  project,
+  index,
+  className = "",
+}: {
+  project: (typeof PROJECTS)[number];
+  index: number;
+  className?: string;
+}) {
+  const meshOrigins = ["18% 16%", "84% 12%", "18% 82%", "82% 78%", "50% 16%"];
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+      className={`project-showcase-card ${className}`}
+      style={
+        {
+          "--project-accent": project.accent,
+          "--project-mesh-origin": meshOrigins[index] ?? "50% 50%",
+        } as React.CSSProperties
+      }
+    >
+      <div className="project-showcase-content">
+        <p className="project-showcase-tags">{project.tags.join(" · ")}</p>
+        <h3>{project.title}</h3>
+        <p className="project-showcase-description">{project.description}</p>
+        <a
+          href={project.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-solid project-showcase-button"
+        >
+          View Project →
+        </a>
+      </div>
+    </motion.article>
+  );
+}
+
 function Portfolio() {
   const active = useActiveSection();
   const educationTimelineRef = useRef<HTMLDivElement>(null);
@@ -830,13 +872,13 @@ function Portfolio() {
               subtitle="A mix of applications I've built and infrastructure I've automated."
             />
 
-            <div className="project-grid grid gap-6 md:grid-cols-2 lg:grid-cols-6">
+            <div className="project-showcase-grid grid gap-6 md:grid-cols-2 lg:grid-cols-6">
               {PROJECTS.map((project, index) => (
-                <ProjectCard
+                <ShowcaseProjectCard
                   key={project.title}
                   project={project}
                   index={index}
-                  className={project.featured ? "lg:col-span-4" : "lg:col-span-2"}
+                  className={`lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}
                 />
               ))}
             </div>

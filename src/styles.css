@@ -755,8 +755,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  -webkit-mask-image: radial-gradient(ellipse 55% 58% at 50% 42%, black 30%, rgb(0 0 0 / 35%) 55%, transparent 85%);
-  mask-image: radial-gradient(ellipse 55% 58% at 50% 42%, black 30%, rgb(0 0 0 / 35%) 55%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 62% 65% at 50% 40%, black 65%, rgb(0 0 0 / 70%) 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse 62% 65% at 50% 40%, black 65%, rgb(0 0 0 / 70%) 82%, transparent 100%);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: 100% 100%;
@@ -769,10 +769,10 @@
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 55% 58% at 50% 42%,
-    transparent 25%,
-    rgb(3 9 20 / 55%) 55%,
-    #030914 90%
+    ellipse 62% 65% at 50% 40%,
+    transparent 60%,
+    rgb(3 9 20 / 40%) 85%,
+    #030914 100%
   );
 }
 

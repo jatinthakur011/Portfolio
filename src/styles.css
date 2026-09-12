@@ -879,6 +879,56 @@
   color: var(--signal);
 }
 
+.education-timeline-progress {
+  background: linear-gradient(to bottom, var(--signal), var(--primary) 55%, oklch(0.82 0.15 85));
+  box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 52%, transparent);
+}
+
+.education-card {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+}
+
+.education-timeline-item:hover .education-card {
+  transform: scale(1.02);
+  border-color: color-mix(in oklab, var(--primary) 40%, transparent);
+  box-shadow: 0 28px 54px -26px oklch(0 0 0 / 0.88), 0 0 36px -16px color-mix(in oklab, var(--primary) 75%, transparent);
+}
+
+.education-timeline-dot {
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.education-timeline-item:hover .education-timeline-dot {
+  animation: education-dot-pulse 1.2s ease-in-out infinite;
+}
+
+.education-highlights {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.education-highlights li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.education-highlights li::before {
+  width: 0.36rem;
+  height: 0.36rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 9px color-mix(in oklab, var(--signal) 68%, transparent);
+  content: "";
+}
+
+@keyframes education-dot-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+}
+
 .project-flip-shell {
   min-height: 425px;
   cursor: pointer;

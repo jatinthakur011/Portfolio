@@ -36,6 +36,11 @@ export const EDUCATION = [
     school: "Chitkara University, Baddi, Himachal Pradesh",
     result: "CGPA: 8.25 / 10",
     accent: "var(--signal)",
+    highlights: [
+      "Data Structures & Algorithms",
+      "Operating Systems & Computer Networks",
+      "Database Management Systems & Cloud Computing",
+    ],
   },
   {
     year: "2021 - 2022",
@@ -43,6 +48,10 @@ export const EDUCATION = [
     school: "Radha Krishna Sr. Sec. School, Ghandalwin, Bilaspur",
     result: "Percentage: 81%",
     accent: "var(--primary)",
+    highlights: [
+      "PCM — Physics, Chemistry & Mathematics",
+      "Computer Science",
+    ],
   },
   {
     year: "2019 - 2020",
@@ -61,6 +70,7 @@ export const PROJECTS = [
     description:
       "A real-time chat app containerised with Docker and deployed on Kubernetes to practice orchestration and scaling.",
     tags: ["Docker", "Kubernetes", "Jenkins", "AWS"],
+    cardMinHeight: 425,
     pipeline: ["Build", "Test", "Deploy"],
     href: "https://github.com/jatinthakur011/chatapp-k8s",
     icon: (
@@ -77,6 +87,7 @@ export const PROJECTS = [
     description:
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
     tags: ["React", "Node.js", "MongoDB"],
+    cardMinHeight: 425,
     pipeline: ["Build", "Test", "Deploy"],
     featured: true,
     href: "https://github.com/jatinthakur011/HealthHub",
@@ -89,6 +100,7 @@ export const PROJECTS = [
     description:
       "A web app for HR operations — secure auth, attendance, salary, task assignment, leave management, and real-time communication.",
     tags: ["React", "Node.js", "MongoDB", "JWT"],
+    cardMinHeight: 425,
     pipeline: ["Build", "Test", "Deploy"],
     href: "https://github.com/jatinthakur011/employee_management_system",
     icon: (
@@ -107,6 +119,7 @@ export const PROJECTS = [
     description:
       "Bash automation that takes a fresh Ubuntu server and applies a repeatable baseline — admin user setup, Nginx deployment, UFW firewall rules, SSH hardening, and automatic security updates, replacing manual server configuration with one repeatable script.",
     tags: ["Bash", "Linux", "Nginx", "UFW", "SSH Hardening"],
+    cardMinHeight: 560,
     pipeline: ["Provision", "Harden", "Validate"],
     href: "https://github.com/jatinthakur011/linux-server-provisioning-hardening",
     icon: (
@@ -123,6 +136,7 @@ export const PROJECTS = [
     description:
       "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage, and critical services (Nginx, SSH), logs health data, and automatically detects and recovers from Nginx failures — scheduled via Cron every 5 minutes, demonstrating basic self-healing infrastructure.",
     tags: ["Bash", "AWS EC2", "Cron", "Nginx", "Auto-Recovery"],
+    cardMinHeight: 560,
     pipeline: ["Monitor", "Detect", "Recover"],
     href: "https://github.com/jatinthakur011/linux-server-monitoring",
     icon: (

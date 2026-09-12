@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
-import { ArrowUp, Copy, Rotate3D } from "lucide-react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { ArrowUp, BookOpen, Copy, GraduationCap, Rotate3D, School } from "lucide-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaAws } from "react-icons/fa";
 import {
   SiDocker,
@@ -319,7 +319,7 @@ function ProjectCard({ project, index, className = "" }: { project: (typeof PROJ
         tiltX.set(0);
         tiltY.set(0);
       }}
-      style={{ "--project-accent": project.accent, rotateX: springX, rotateY: springY, transformPerspective: 1200 } as React.CSSProperties}
+      style={{ "--project-accent": project.accent, minHeight: project.cardMinHeight, rotateX: springX, rotateY: springY, transformPerspective: 1200 } as React.CSSProperties}
       className={`project-flip-shell ${flipped ? "is-flipped" : ""} ${className}`}
       onClick={() => setFlipped((value) => !value)}
     >
@@ -367,6 +367,13 @@ function ProjectCard({ project, index, className = "" }: { project: (typeof PROJ
 
 function Portfolio() {
   const active = useActiveSection();
+  const educationTimelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: educationScrollProgress } = useScroll({
+    target: educationTimelineRef,
+    offset: ["start 72%", "end 52%"],
+  });
+  const timelineScale = useTransform(educationScrollProgress, [0, 0.9], [0, 1]);
+  const prefersReducedMotion = useReducedMotion();
   const typedIdentity = useTypingLoop(["full-stack developer", "devops engineer", "problem solver"]);
   const [copiedContact, setCopiedContact] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -601,7 +608,7 @@ function Portfolio() {
               subtitle="The milestones that shaped how I think, build, and keep learning."
             />
 
-            <div className="relative mx-auto max-w-3xl">
+            <div ref={educationTimelineRef} className="relative mx-auto max-w-3xl">
               <div
                 className="absolute top-2 bottom-2 left-[1.15rem] w-px sm:left-1/2 sm:-translate-x-1/2"
                 style={{
@@ -610,9 +617,17 @@ function Portfolio() {
                 }}
                 aria-hidden="true"
               />
+              <motion.div
+                className="education-timeline-progress absolute top-2 bottom-2 left-[1.15rem] w-px origin-top sm:left-1/2 sm:-translate-x-1/2"
+                style={{ scaleY: prefersReducedMotion ? 1 : timelineScale }}
+                aria-hidden="true"
+              />
 
               <div className="space-y-7 sm:space-y-10">
-                {EDUCATION.map((item, index) => (
+                {EDUCATION.map((item, index) => {
+                  const MilestoneIcon = [GraduationCap, School, BookOpen][index] ?? BookOpen;
+
+                  return (
                   <motion.article
                     key={item.title}
                     initial={{ opacity: 0, rotateX: 10, y: 18 }}
@@ -620,12 +635,12 @@ function Portfolio() {
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
                     onMouseMove={spotlight}
-                    className={`relative flex items-start gap-5 pl-11 sm:gap-0 sm:pl-0 ${
+                    className={`education-timeline-item group relative flex items-start gap-5 pl-11 sm:gap-0 sm:pl-0 ${
                       index % 2 === 0 ? "sm:pr-[calc(50%+2.5rem)]" : "sm:pl-[calc(50%+2.5rem)]"
                     }`}
                   >
                     <span
-                      className="absolute top-7 left-[0.65rem] z-10 h-4 w-4 rounded-full border-[3px] sm:left-1/2 sm:-translate-x-1/2"
+                      className="education-timeline-dot absolute top-7 left-[0.65rem] z-10 h-4 w-4 rounded-full border-[3px] sm:left-1/2 sm:-translate-x-1/2"
                       style={{
                         background: item.accent,
                         borderColor: "var(--background)",
@@ -633,24 +648,43 @@ function Portfolio() {
                       }}
                       aria-hidden="true"
                     />
-                    <div className="glow-card w-full p-6 sm:p-7">
+                    <div className="education-card glow-card w-full p-6 sm:p-7">
                       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                        <span
-                          className="rounded-full border px-3 py-1 font-mono text-[0.72rem] tracking-wider"
-                          style={{
-                            color: item.accent,
-                            borderColor: `color-mix(in oklab, ${item.accent} 35%, transparent)`,
-                            background: `color-mix(in oklab, ${item.accent} 10%, transparent)`,
-                          }}
-                        >
-                          {item.year}
-                        </span>
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            className="flex h-9 w-9 items-center justify-center rounded-lg"
+                            style={{
+                              color: item.accent,
+                              background: `color-mix(in oklab, ${item.accent} 12%, transparent)`,
+                            }}
+                            aria-hidden="true"
+                          >
+                            <MilestoneIcon size={18} strokeWidth={1.8} />
+                          </span>
+                          <span
+                            className="rounded-full border px-3 py-1 font-mono text-[0.72rem] tracking-wider"
+                            style={{
+                              color: item.accent,
+                              borderColor: `color-mix(in oklab, ${item.accent} 35%, transparent)`,
+                              background: `color-mix(in oklab, ${item.accent} 10%, transparent)`,
+                            }}
+                          >
+                            {item.year}
+                          </span>
+                        </div>
                         <span className="font-mono text-[0.68rem] tracking-wider text-ink-dim uppercase">
                           milestone 0{index + 1}
                         </span>
                       </div>
                       <h3 className="text-xl leading-tight text-ink">{item.title}</h3>
                       <p className="mt-2 text-sm leading-relaxed text-ink-soft">{item.school}</p>
+                      {"highlights" in item && item.highlights ? (
+                        <ul className="education-highlights mt-5 space-y-2">
+                          {item.highlights.map((highlight) => (
+                            <li key={highlight}>{highlight}</li>
+                          ))}
+                        </ul>
+                      ) : null}
                       <p
                         className="mt-5 inline-flex rounded-lg px-3 py-2 font-mono text-xs"
                         style={{
@@ -662,7 +696,8 @@ function Portfolio() {
                       </p>
                     </div>
                   </motion.article>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </section>

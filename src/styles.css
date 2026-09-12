@@ -755,8 +755,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  mask-image: radial-gradient(ellipse 72% 84% at 50% 48%, black 48%, rgb(0 0 0 / 0.94) 66%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 72% 84% at 50% 48%, black 48%, rgb(0 0 0 / 0.94) 66%, transparent 100%);
+  mask-image: radial-gradient(ellipse 65% 70% at center, black 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 70% at center, black 50%, transparent 100%);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: 100% 100%;
@@ -764,29 +764,53 @@
 }
 
 .hero-portrait-layer {
-  position: absolute;
-  top: 1rem;
-  right: 3%;
-  z-index: 0;
-  width: min(57vw, 660px);
-  height: min(78vh, 760px);
-  perspective: 1200px;
-  pointer-events: auto;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  justify-self: center;
+  width: min(100%, 420px);
+  height: min(72vh, 560px);
+  min-height: 420px;
+  pointer-events: none;
 }
 
-.hero-portrait-layer .photo-frame-3d {
-  transform: none;
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(350px, 420px);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  min-height: 720px;
+}
+
+.hero-copy {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 767px) {
-  .hero-portrait-layer {
-    top: 3.5rem;
-    right: 4%;
-    width: 92vw;
-    height: 66vh;
-    opacity: 0.48;
+  .hero-layout {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0;
   }
 
+  .hero-portrait-layer {
+    order: 1;
+    width: min(100%, 390px);
+    height: 440px;
+    min-height: 0;
+    margin-bottom: -2rem;
+    opacity: 0.72;
+  }
+
+  .hero-copy {
+    order: 2;
+    width: 100%;
+  }
 }
 
 .skills-sphere-desktop {

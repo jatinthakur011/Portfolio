@@ -375,11 +375,12 @@ function Portfolio() {
 
         <div className="mx-auto max-w-5xl px-6">
           {/* HERO */}
-          <section id="home" className="relative overflow-hidden pt-16 pb-16 text-center sm:pt-24">
+          <section id="home" className="hero-layout relative overflow-hidden pt-16 pb-16 text-center sm:pt-24">
             <div className="hero-portrait-layer" aria-hidden="true">
               <PhotoFrame3D photoUrl={photoUrl} />
             </div>
 
+            <div className="hero-copy">
             <div
               className="reveal relative z-10 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[0.8rem]"
               style={{
@@ -481,6 +482,7 @@ function Portfolio() {
                   </span>
                 ))}
               </div>
+            </div>
             </div>
           </section>
 

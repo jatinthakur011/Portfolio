@@ -64,6 +64,7 @@ export const PROJECTS = [
     accent: "oklch(0.68 0.17 258)",
     kicker: "// KUBERNETES · REAL-TIME",
     title: "ChatApp on Kubernetes",
+    image: "/projects/chatapp-bg.jpg",
     description:
       "A real-time chat app containerised with Docker and deployed on Kubernetes to practice orchestration and scaling.",
     tags: ["Docker", "Kubernetes", "Jenkins", "AWS"],
@@ -81,6 +82,7 @@ export const PROJECTS = [
     accent: "oklch(0.72 0.16 10)",
     kicker: "// HEALTHCARE PLATFORM",
     title: "HealthHub",
+    image: "/projects/healthhub-bg.jpg",
     description:
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
     tags: ["React", "Node.js", "MongoDB"],
@@ -94,6 +96,7 @@ export const PROJECTS = [
     accent: "oklch(0.82 0.15 85)",
     kicker: "// HR PLATFORM",
     title: "Employee Management System",
+    image: "/projects/employee-management-bg.jpg",
     description:
       "A web app for HR operations — secure auth, attendance, salary, task assignment, leave management, and real-time communication.",
     tags: ["React", "Node.js", "MongoDB", "JWT"],
@@ -113,6 +116,7 @@ export const PROJECTS = [
     accent: "oklch(0.77 0.15 155)",
     kicker: "// LINUX · SERVER PROVISIONING",
     title: "Automated Linux Server Provisioning & Security Hardening",
+    image: "/projects/linux-provisioning-bg.jpg",
     description:
       "Bash automation that takes a fresh Ubuntu server and applies a repeatable baseline — admin user setup, Nginx deployment, UFW firewall rules, SSH hardening, and automatic security updates, replacing manual server configuration with one repeatable script.",
     tags: ["Bash", "Linux", "Nginx", "UFW", "SSH Hardening"],
@@ -130,6 +134,7 @@ export const PROJECTS = [
     accent: "oklch(0.71 0.15 235)",
     kicker: "// DEVOPS · MONITORING & AUTO-RECOVERY",
     title: "Linux Server Monitoring & Auto-Recovery",
+    image: "/projects/linux-monitoring-bg.jpg",
     description:
       "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage, and critical services (Nginx, SSH), logs health data, and automatically detects and recovers from Nginx failures — scheduled via Cron every 5 minutes, demonstrating basic self-healing infrastructure.",
     tags: ["Bash", "AWS EC2", "Cron", "Nginx", "Auto-Recovery"],

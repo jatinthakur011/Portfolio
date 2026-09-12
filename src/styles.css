@@ -1194,6 +1194,17 @@
     opacity 0.4s ease;
 }
 
+.project-showcase-image {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  transition: transform 0.5s ease, opacity 0.4s ease;
+}
+
 .project-showcase-card::after {
   position: absolute;
   z-index: 1;
@@ -1211,6 +1222,11 @@
 .project-showcase-card:hover::before {
   opacity: 0.72;
   transform: scale(1.05);
+}
+
+.project-showcase-card:hover .project-showcase-image {
+  opacity: 0.94;
+  transform: scale(1.04);
 }
 
 .project-showcase-content {

@@ -515,6 +515,15 @@ function ShowcaseProjectCard({
         } as React.CSSProperties
       }
     >
+      <img
+        src={project.image}
+        alt=""
+        className="project-showcase-image"
+        aria-hidden="true"
+        onError={(event) => {
+          event.currentTarget.style.display = "none";
+        }}
+      />
       <div className="project-showcase-content">
         <p className="project-showcase-tags">{project.tags.join(" · ")}</p>
         <h3>{project.title}</h3>

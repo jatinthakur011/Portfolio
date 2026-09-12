@@ -857,7 +857,7 @@ function Portfolio() {
           </section>
 
           {/* PROJECTS */}
-          <section id="projects" className="pt-24 pb-10">
+          <section id="projects" className="projects-section pt-24 pb-10">
             <SectionHeading
               eyebrow="03 — selected work"
               title="My Projects"

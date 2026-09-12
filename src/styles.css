@@ -1153,9 +1153,16 @@
   align-items: stretch;
 }
 
+.projects-section {
+  position: relative;
+  left: 50%;
+  width: min(1400px, calc(100vw - 3rem));
+  transform: translateX(-50%);
+}
+
 .project-showcase-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
   row-gap: 2.5rem;
   column-gap: 2.5rem;
   padding-inline: 1.5rem;
@@ -1166,6 +1173,8 @@
   position: relative;
   display: block;
   width: 100%;
+  max-width: 450px;
+  justify-self: center;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border: 1px solid color-mix(in oklab, var(--project-accent) 58%, transparent);

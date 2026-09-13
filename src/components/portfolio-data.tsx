@@ -82,7 +82,7 @@ export const PROJECTS = [
     accent: "oklch(0.72 0.16 10)",
     kicker: "// HEALTHCARE PLATFORM",
     title: "HealthHub",
-    image: "/projects/healthhub.png",
+    image: "/projects/healthub.png",
     description:
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
     tags: ["React", "Node.js", "MongoDB"],

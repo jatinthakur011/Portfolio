@@ -526,7 +526,7 @@ function ShowcaseProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
-      className={`project-showcase-card ${className}`}
+      className={`project-showcase-card group ${className}`}
       href={project.href}
       target="_blank"
       rel="noopener noreferrer"
@@ -541,6 +541,20 @@ function ShowcaseProjectCard({
         alt={`${project.title} project preview`}
         className="project-showcase-image"
       />
+      <span className="project-overlay-scrim" aria-hidden="true" />
+      <div className="project-overlay-content">
+        <p className="project-overlay-kicker">{project.kicker}</p>
+        <h3 className="project-overlay-title">{project.title}</h3>
+        <p className="project-overlay-desc">{project.description}</p>
+        <div className="project-overlay-tags">
+          {project.tags.map((tag) => (
+            <span key={tag} className="project-overlay-tag">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <span className="btn-solid project-overlay-cta py-2 text-sm">View Project →</span>
+      </div>
     </motion.a>
   );
 }

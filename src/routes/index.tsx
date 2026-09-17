@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { FaAws } from "react-icons/fa";
+import { FaAws, FaJava } from "react-icons/fa";
 import {
   SiAnsible,
   SiCplusplus,
@@ -28,7 +28,6 @@ import {
   SiExpress,
   SiGit,
   SiGnubash,
-  SiJava,
   SiJavascript,
   SiJenkins,
   SiKubernetes,
@@ -77,7 +76,7 @@ const SKILL_BRANDS: Record<string, { icon: IconType; color: string }> = {
   Git: { icon: SiGit, color: "#f05032" },
   Vercel: { icon: SiVercel, color: "#f4f4f5" },
   JavaScript: { icon: SiJavascript, color: "#f7df1e" },
-  Java: { icon: SiJava, color: "#f89820" },
+  Java: { icon: FaJava, color: "#f89820" },
   "C++": { icon: SiCplusplus, color: "#659ad2" },
 };
 

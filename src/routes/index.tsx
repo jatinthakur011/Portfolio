@@ -816,7 +816,7 @@ function Portfolio() {
 
             <div ref={experienceTimelineRef} className="relative mx-auto max-w-3xl">
               <div
-                className="absolute top-2 bottom-2 left-[1.15rem] w-px sm:left-1/2 sm:-translate-x-1/2"
+                className="absolute top-2 bottom-2 left-[1.15rem] w-px"
                 style={{
                   background:
                     "linear-gradient(to bottom, transparent, var(--signal) 12%, var(--primary) 55%, transparent)",
@@ -824,7 +824,7 @@ function Portfolio() {
                 aria-hidden="true"
               />
               <motion.div
-                className="experience-timeline-progress absolute top-2 bottom-2 left-[1.15rem] w-px origin-top sm:left-1/2 sm:-translate-x-1/2"
+                className="experience-timeline-progress absolute top-2 bottom-2 left-[1.15rem] w-px origin-top"
                 style={{ scaleY: prefersReducedMotion ? 1 : experienceTimelineScale }}
                 aria-hidden="true"
               />
@@ -839,12 +839,10 @@ function Portfolio() {
                     transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
                     onMouseMove={spotlight}
                     style={{ "--experience-accent": item.accent } as React.CSSProperties}
-                    className={`experience-timeline-item group relative flex items-start gap-5 pl-11 sm:gap-0 sm:pl-0 ${
-                      index % 2 === 0 ? "sm:pr-[calc(50%+2.5rem)]" : "sm:pl-[calc(50%+2.5rem)]"
-                    }`}
+                    className="experience-timeline-item group relative flex items-start gap-5 pl-11"
                   >
                     <span
-                      className="experience-timeline-dot absolute top-7 left-[0.65rem] z-10 h-4 w-4 rounded-full border-[3px] sm:left-1/2 sm:-translate-x-1/2"
+                      className="experience-timeline-dot absolute top-7 left-[0.65rem] z-10 h-4 w-4 rounded-full border-[3px]"
                       style={{
                         background: item.accent,
                         borderColor: "var(--background)",

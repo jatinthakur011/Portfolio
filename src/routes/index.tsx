@@ -10,30 +10,39 @@ import {
 import {
   ArrowUp,
   BookOpen,
-  Code2,
-  Container,
   Copy,
   Briefcase,
   ExternalLink,
   GraduationCap,
   Github,
-  Monitor,
   Rotate3D,
   School,
-  Server,
 } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { FaAws } from "react-icons/fa";
 import {
+  SiAnsible,
+  SiCplusplus,
   SiDocker,
+  SiExpress,
+  SiGit,
   SiGnubash,
+  SiJava,
+  SiJavascript,
+  SiJenkins,
   SiKubernetes,
   SiLinux,
   SiMongodb,
+  SiMysql,
+  SiNextdotjs,
   SiNginx,
   SiNodedotjs,
   SiReact,
+  SiTailwindcss,
+  SiTerraform,
+  SiTypescript,
+  SiVercel,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 
@@ -50,17 +59,29 @@ import {
 } from "@/components/portfolio-data";
 import photoUrl from "@/assets/Photo.png";
 
-const SKILL_CATEGORY_ICONS = {
-  Frontend: Monitor,
-  Backend: Server,
-  DevOps: Container,
-  "Programming Languages": Code2,
+const SKILL_BRANDS: Record<string, { icon: IconType; color: string }> = {
+  "React.js": { icon: SiReact, color: "#61dafb" },
+  "Next.js": { icon: SiNextdotjs, color: "#f4f4f5" },
+  TypeScript: { icon: SiTypescript, color: "#3178c6" },
+  "Tailwind CSS": { icon: SiTailwindcss, color: "#38bdf8" },
+  "Node.js": { icon: SiNodedotjs, color: "#7ccf54" },
+  "Express.js": { icon: SiExpress, color: "#e5e7eb" },
+  MongoDB: { icon: SiMongodb, color: "#47a248" },
+  MySQL: { icon: SiMysql, color: "#4479a1" },
+  Docker: { icon: SiDocker, color: "#2496ed" },
+  Kubernetes: { icon: SiKubernetes, color: "#326ce5" },
+  Jenkins: { icon: SiJenkins, color: "#d24939" },
+  Terraform: { icon: SiTerraform, color: "#844fba" },
+  Ansible: { icon: SiAnsible, color: "#f4f4f5" },
+  AWS: { icon: FaAws, color: "#ff9900" },
+  Git: { icon: SiGit, color: "#f05032" },
+  Vercel: { icon: SiVercel, color: "#f4f4f5" },
+  JavaScript: { icon: SiJavascript, color: "#f7df1e" },
+  Java: { icon: SiJava, color: "#f89820" },
+  "C++": { icon: SiCplusplus, color: "#659ad2" },
 };
 
-function SkillCategoryIcon({ title }: { title: string }) {
-  const Icon = SKILL_CATEGORY_ICONS[title as keyof typeof SKILL_CATEGORY_ICONS];
-  return <Icon aria-hidden="true" size={16} strokeWidth={2} />;
-}
+const SKILL_FILTERS = ["All", "Frontend", "Backend", "DevOps", "Cloud", "Tools", "Languages"] as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -592,6 +613,10 @@ function Portfolio() {
   ]);
   const [copiedContact, setCopiedContact] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [skillFilter, setSkillFilter] = useState<(typeof SKILL_FILTERS)[number]>("All");
+  const visibleSkills = SKILL_GROUPS.flatMap((group) =>
+    group.items.map((skill) => ({ ...skill, category: group.title })),
+  ).filter((skill) => skillFilter === "All" || skill.category === skillFilter);
 
   useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > window.innerHeight * 0.7);
@@ -1019,34 +1044,48 @@ function Portfolio() {
 
           {/* SKILLS */}
           <section id="skills" className="pt-24 pb-10">
-            <SectionHeading eyebrow="04 — toolbox" title="My Skills" />
+            <div className="skills-showcase-heading">
+              <div className="skills-heading-title">
+                <span aria-hidden="true" className="skills-heading-rule" />
+                <h2><span>My</span> Skills</h2>
+                <span aria-hidden="true" className="skills-heading-rule skills-heading-rule-right" />
+              </div>
+              <p>Technologies I work with to build, deploy and scale modern applications</p>
+              <div className="skills-filter-row" aria-label="Filter skills">
+                {SKILL_FILTERS.map((filter) => (
+                  <button
+                    key={filter}
+                    type="button"
+                    className={`skills-filter-pill ${skillFilter === filter ? "is-active" : ""}`}
+                    onClick={() => setSkillFilter(filter)}
+                    aria-pressed={skillFilter === filter}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="skills-grid">
+              {visibleSkills.map((skill, index) => {
+                const brand = SKILL_BRANDS[skill.name];
+                const BrandIcon = brand.icon;
 
-            <div className="skills-grid grid gap-11 sm:grid-cols-2 sm:gap-x-14">
-              {SKILL_GROUPS.map((group, index) => (
-                <motion.div
-                  key={group.title}
-                  initial={{ opacity: 0, rotateX: 10, y: 18 }}
-                  whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
-                  viewport={{ once: true, amount: 0.25 }}
-                  transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
-                  className={`skill-category skill-category-${group.title.toLowerCase().replaceAll(" ", "-")} reveal`}
-                >
-                  <h4 className="skill-category-heading mb-4 text-sm font-semibold tracking-[0.08em] text-ink-dim uppercase">
-                    <SkillCategoryIcon title={group.title} />
-                    {group.title}
-                  </h4>
-                  <div className="flex flex-wrap gap-2.5">
-                    {group.items.map((item) => (
-                      <span
-                        key={item}
-                        className={`chip skill-pill ${group.variant === "signal" ? "chip-signal" : ""}`}
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
+                return (
+                  <motion.div
+                    key={skill.name}
+                    initial={{ opacity: 0, rotateX: 10, y: 18 }}
+                    whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                    className="skill-logo-card"
+                    style={{ "--skill-brand": brand.color } as React.CSSProperties}
+                  >
+                    <BrandIcon className="skill-logo-icon" aria-hidden="true" />
+                    <h3>{skill.name}</h3>
+                    <span className="skill-logo-tooltip">{skill.descriptor || skill.name}</span>
+                  </motion.div>
+                );
+              })}
             </div>
           </section>
 

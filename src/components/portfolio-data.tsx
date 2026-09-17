@@ -198,23 +198,50 @@ export const PROJECTS = [
 export const SKILL_GROUPS = [
   {
     title: "Frontend",
-    variant: "primary" as const,
-    items: ["React.js", "Next.js", "TypeScript", "Tailwind CSS"],
+    items: [
+      { name: "React.js", descriptor: "UI Library" },
+      { name: "Next.js", descriptor: "React Framework" },
+      { name: "TypeScript", descriptor: "Typed JavaScript" },
+      { name: "Tailwind CSS", descriptor: "Utility-First CSS" },
+    ],
   },
   {
     title: "Backend",
-    variant: "primary" as const,
-    items: ["Node.js", "Express", "MongoDB", "MySQL"],
+    items: [
+      { name: "Node.js", descriptor: "JavaScript Runtime" },
+      { name: "Express.js", descriptor: "Web Framework" },
+      { name: "MongoDB", descriptor: "NoSQL Database" },
+      { name: "MySQL", descriptor: "Relational Database" },
+    ],
   },
   {
     title: "DevOps",
-    variant: "signal" as const,
-    items: ["Docker", "Kubernetes", "Jenkins", "Terraform", "Ansible", "AWS", "Git", "Vercel"],
+    items: [
+      { name: "Docker", descriptor: "Containerization" },
+      { name: "Kubernetes", descriptor: "Container Orchestration" },
+      { name: "Jenkins", descriptor: "CI/CD Automation" },
+      { name: "Terraform", descriptor: "Infrastructure as Code" },
+      { name: "Ansible", descriptor: "Configuration Automation" },
+    ],
   },
   {
-    title: "Programming Languages",
-    variant: "primary" as const,
-    items: ["JavaScript", "TypeScript", "Java", "C++"],
+    title: "Cloud",
+    items: [{ name: "AWS", descriptor: "Cloud Platform" }],
+  },
+  {
+    title: "Tools",
+    items: [
+      { name: "Git", descriptor: "Version Control" },
+      { name: "Vercel", descriptor: "Frontend Deployment" },
+    ],
+  },
+  {
+    title: "Languages",
+    items: [
+      { name: "JavaScript", descriptor: "Web Language" },
+      { name: "Java", descriptor: "Object-Oriented Programming" },
+      { name: "C++", descriptor: "Systems Programming" },
+    ],
   },
 ];
 

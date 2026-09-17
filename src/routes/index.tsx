@@ -9,12 +9,17 @@ import {
 } from "framer-motion";
 import {
   ArrowUp,
+  Building2,
   BookOpen,
+  CalendarDays,
   Copy,
   Briefcase,
   ExternalLink,
+  FileText,
   GraduationCap,
   Github,
+  Layers3,
+  Quote,
   Rotate3D,
   School,
 } from "lucide-react";
@@ -917,6 +922,7 @@ function Portfolio() {
 
           {/* EDUCATION */}
           <section id="education" className="pt-24 pb-10">
+            <div className="education-legacy">
             <SectionHeading
               eyebrow="02 — the foundation"
               title="Education"
@@ -1015,6 +1021,59 @@ function Portfolio() {
                 })}
               </div>
             </div>
+            </div>
+            <div className="education-showcase-heading">
+              <p className="education-showcase-eyebrow"><span /> My Academic Background <span /></p>
+              <h2><span>Edu</span>cation</h2>
+              <p>A journey of learning, growth and building the foundation for my career.</p>
+            </div>
+            <div className="education-showcase-list">
+              {EDUCATION.map((item, index) => {
+                const EducationIcon = [GraduationCap, BookOpen, FileText][index] ?? FileText;
+                const label = ["Undergraduation", "Senior Secondary", "Secondary"][index] ?? "Education";
+                const courseworkLabel = index === 0 ? "Key Coursework" : "Subjects";
+                const [resultLabel, resultValue] = item.result.split(": ");
+                const coursework = "highlights" in item ? item.highlights : [];
+
+                return (
+                  <motion.article
+                    key={item.title}
+                    initial={{ opacity: 0, rotateX: 10, y: 18 }}
+                    whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                    onMouseMove={spotlight}
+                    className="education-showcase-card glow-card"
+                    style={{ "--education-accent": item.accent } as React.CSSProperties}
+                  >
+                    <span className="education-accent-bar" aria-hidden="true" />
+                    <EducationIcon className="education-ghost-icon" aria-hidden="true" />
+                    <div className="education-card-icon" aria-hidden="true"><EducationIcon size={29} /></div>
+                    <div className="education-showcase-main">
+                      <p className="education-card-category">{label}</p>
+                      <h3>{item.title}</h3>
+                      <div className="education-card-meta">
+                        <span><Building2 size={16} aria-hidden="true" /> {item.school}</span>
+                        <span><CalendarDays size={16} aria-hidden="true" /> {item.year}</span>
+                      </div>
+                      <p className="education-card-description">{item.description}</p>
+                      <div className="education-card-divider" />
+                      <p className="education-coursework-label"><Layers3 size={18} aria-hidden="true" /> {courseworkLabel}</p>
+                      {coursework.length ? (
+                        <div className="education-coursework-chips">
+                          {coursework.map((highlight) => <span key={highlight} className="chip">{highlight}</span>)}
+                        </div>
+                      ) : null}
+                    </div>
+                    <aside className="education-result-box">
+                      <span>{resultLabel}</span>
+                      <strong>{resultValue}</strong>
+                    </aside>
+                  </motion.article>
+                );
+              })}
+            </div>
+            <p className="education-showcase-quote"><span /><Quote size={18} aria-hidden="true" /> Education is the stepping stone to a brighter tomorrow. <Quote size={18} aria-hidden="true" className="education-quote-close" /><span /></p>
           </section>
 
           {/* PROJECTS */}

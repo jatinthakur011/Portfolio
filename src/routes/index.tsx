@@ -13,7 +13,9 @@ import {
   Code2,
   Container,
   Copy,
+  ExternalLink,
   GraduationCap,
+  Github,
   Monitor,
   Rotate3D,
   School,
@@ -475,7 +477,7 @@ function ProjectCard({
               ))}
             </div>
             <a
-              href={project.href}
+              href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(event) => event.stopPropagation()}
@@ -520,42 +522,49 @@ function ShowcaseProjectCard({
   index: number;
   className?: string;
 }) {
+  const primaryTitle = project.title.slice(0, -project.titleAccent.length).trimEnd();
+  const liveUrl = project.liveUrl;
+  const viewUrl = liveUrl ?? project.githubUrl;
+
   return (
-    <motion.a
+    <motion.article
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
-      className={`project-showcase-card group ${className}`}
-      href={project.href}
-      target="_blank"
-      rel="noopener noreferrer"
+      className={`project-showcase-card project-card-surface group ${className}`}
       style={
         {
           "--project-accent": project.accent,
         } as React.CSSProperties
       }
     >
-      <img
-        src={project.image}
-        alt={`${project.title} project preview`}
-        className="project-showcase-image"
-      />
-      <span className="project-overlay-scrim" aria-hidden="true" />
-      <div className="project-overlay-content">
-        <p className="project-overlay-kicker">{project.kicker}</p>
-        <h3 className="project-overlay-title">{project.title}</h3>
-        <p className="project-overlay-desc">{project.description}</p>
-        <div className="project-overlay-tags">
+      <div className="project-showcase-media">
+        <div className="project-browser-frame">
+          <span className="project-browser-dots" aria-hidden="true"><i /><i /><i /></span>
+          <img src={project.image} alt={`${project.title} project preview`} className="project-showcase-image" />
+        </div>
+      </div>
+      <div className="project-showcase-content">
+        {project.featured ? <span className="project-showcase-featured">★ Featured</span> : null}
+        <p className="project-showcase-category">{project.category}</p>
+        <h3 className="project-showcase-title">
+          {primaryTitle ? <span>{primaryTitle} </span> : null}
+          <span className="project-showcase-title-accent">{project.titleAccent}</span>
+        </h3>
+        <p className="project-showcase-desc">{project.description}</p>
+        <div className="project-showcase-tags">
           {project.tags.map((tag) => (
-            <span key={tag} className="project-overlay-tag">
-              {tag}
-            </span>
+            <ProjectTag key={tag} tag={tag} />
           ))}
         </div>
-        <span className="btn-solid project-overlay-cta py-2 text-sm">View Project →</span>
+        <div className="project-showcase-actions">
+          <a href={viewUrl} target="_blank" rel="noopener noreferrer" className="btn-solid project-showcase-primary">View Project &rarr;</a>
+          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><Github size={15} aria-hidden="true" /> GitHub</a>
+          {liveUrl ? <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><ExternalLink size={15} aria-hidden="true" /> Live Demo &nearr;</a> : null}
+        </div>
       </div>
-    </motion.a>
+    </motion.article>
   );
 }
 
@@ -893,11 +902,15 @@ function Portfolio() {
 
           {/* PROJECTS */}
           <section id="projects" className="projects-section pt-24 pb-10">
-            <SectionHeading
-              eyebrow="03 — selected work"
-              title="My Projects"
-              subtitle="A mix of applications I've built and infrastructure I've automated."
-            />
+            <div className="project-showcase-heading">
+              <span className="project-heading-badge">My Work</span>
+              <h2 className="section-title">Featured <span>Projects</span></h2>
+              <p>A mix of applications I've built and infrastructure I've automated. Each project reflects my passion for building scalable solutions using modern technologies.</p>
+              <div className="project-heading-note" aria-hidden="true">
+                <span>Ideas to Impact</span>
+                <svg viewBox="0 0 150 38" fill="none"><path d="M4 8c25 25 76 28 126 13M126 21l-9-7m9 7-8 8" /></svg>
+              </div>
+            </div>
 
             <div className="project-showcase-grid">
               {PROJECTS.map((project, index) => (
@@ -908,6 +921,7 @@ function Portfolio() {
                 />
               ))}
             </div>
+            <p className="project-showcase-footer">Building today for a better tomorrow</p>
           </section>
 
           {/* SKILLS */}

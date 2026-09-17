@@ -63,14 +63,17 @@ export const PROJECTS = [
   {
     accent: "oklch(0.68 0.17 258)",
     kicker: "// KUBERNETES · REAL-TIME",
+    category: "Full-Stack • DevOps",
     title: "ChatApp on Kubernetes",
+    titleAccent: "on Kubernetes",
     image: "/projects/chatapp.png",
     description:
       "A real-time chat app containerised with Docker and deployed on Kubernetes to practice orchestration and scaling.",
     tags: ["Docker", "Kubernetes", "Jenkins", "AWS"],
     cardMinHeight: 480,
     pipeline: ["Build", "Test", "Deploy"],
-    href: "https://github.com/jatinthakur011/chatapp-k8s",
+    liveUrl: undefined,
+    githubUrl: "https://github.com/jatinthakur011/chatapp-k8s",
     icon: (
       <>
         <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" />
@@ -81,7 +84,9 @@ export const PROJECTS = [
   {
     accent: "oklch(0.72 0.16 10)",
     kicker: "// HEALTHCARE PLATFORM",
+    category: "Full-Stack Web Application",
     title: "HealthHub",
+    titleAccent: "Hub",
     image: "/projects/healthhub.png",
     description:
       "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
@@ -89,20 +94,24 @@ export const PROJECTS = [
     cardMinHeight: 480,
     pipeline: ["Build", "Test", "Deploy"],
     featured: true,
-    href: "https://github.com/jatinthakur011/HealthHub",
+    liveUrl: undefined,
+    githubUrl: "https://github.com/jatinthakur011/HealthHub",
     icon: <path d="M2 12h4l2-6 4 12 2-8 2 4h6" />,
   },
   {
     accent: "oklch(0.82 0.15 85)",
     kicker: "// HR PLATFORM",
+    category: "Full-Stack Web Application",
     title: "Employee Management System",
+    titleAccent: "Management System",
     image: "/projects/employee-management.png",
     description:
       "A web app for HR operations — secure auth, attendance, salary, task assignment, leave management, and real-time communication.",
     tags: ["React", "Node.js", "MongoDB", "JWT"],
     cardMinHeight: 480,
     pipeline: ["Build", "Test", "Deploy"],
-    href: "https://github.com/jatinthakur011/employee_management_system",
+    liveUrl: undefined,
+    githubUrl: "https://github.com/jatinthakur011/employee_management_system",
     icon: (
       <>
         <rect x="3" y="4" width="7" height="7" rx="1.5" />
@@ -115,14 +124,17 @@ export const PROJECTS = [
   {
     accent: "oklch(0.77 0.15 155)",
     kicker: "// LINUX · SERVER PROVISIONING",
+    category: "DevOps • Infrastructure",
     title: "Automated Linux Server Provisioning & Security Hardening",
+    titleAccent: "Security Hardening",
     image: "/projects/linux-provisioning.png",
     description:
       "Bash automation that takes a fresh Ubuntu server and applies a repeatable baseline — admin user setup, Nginx deployment, UFW firewall rules, SSH hardening, and automatic security updates, replacing manual server configuration with one repeatable script.",
     tags: ["Bash", "Linux", "Nginx", "UFW", "SSH Hardening"],
     cardMinHeight: 620,
     pipeline: ["Provision", "Harden", "Validate"],
-    href: "https://github.com/jatinthakur011/linux-server-provisioning-hardening",
+    liveUrl: undefined,
+    githubUrl: "https://github.com/jatinthakur011/linux-server-provisioning-hardening",
     icon: (
       <>
         <rect x="3" y="4" width="18" height="16" rx="2" />
@@ -133,14 +145,17 @@ export const PROJECTS = [
   {
     accent: "oklch(0.71 0.15 235)",
     kicker: "// DEVOPS · MONITORING & AUTO-RECOVERY",
+    category: "DevOps • Monitoring",
     title: "Linux Server Monitoring & Auto-Recovery",
+    titleAccent: "Auto-Recovery",
     image: "/projects/linux-monitoring.png",
     description:
       "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage, and critical services (Nginx, SSH), logs health data, and automatically detects and recovers from Nginx failures — scheduled via Cron every 5 minutes, demonstrating basic self-healing infrastructure.",
     tags: ["Bash", "AWS EC2", "Cron", "Nginx", "Auto-Recovery"],
     cardMinHeight: 620,
     pipeline: ["Monitor", "Detect", "Recover"],
-    href: "https://github.com/jatinthakur011/linux-server-monitoring",
+    liveUrl: undefined,
+    githubUrl: "https://github.com/jatinthakur011/linux-server-monitoring",
     icon: (
       <>
         <circle cx="12" cy="12" r="8" />

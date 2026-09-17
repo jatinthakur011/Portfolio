@@ -3,6 +3,7 @@ import { Phone } from "lucide-react";
 export const NAV_LINKS = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
   { id: "projects", label: "Projects" },
   { id: "skills", label: "Skills" },
@@ -56,6 +57,35 @@ export const EDUCATION = [
     school: "Nav Chetna Public School, Leheri-Sarail, Bilaspur",
     result: "Percentage: 86%",
     accent: "oklch(0.82 0.15 85)",
+  },
+] as const;
+
+export const EXPERIENCE = [
+  {
+    role: "DevOps Intern",
+    company: "CodSoft",
+    location: "Remote",
+    duration: "Sep 2026 - Present",
+    durationBadge: "SEP 2026 – PRESENT",
+    accent: "var(--signal)",
+    tags: ["Docker", "Git/GitHub", "Linux", "Nginx", "GitHub Actions", "Terraform", "CI/CD"],
+    highlights: [
+      "Selected for a 1-month virtual DevOps internship focused on hands-on experience with Docker, Git/GitHub, Linux, Nginx, CI/CD with GitHub Actions, and Infrastructure as Code with Terraform.",
+      "Currently working on practical DevOps tasks involving containerization, automation, deployment, and cloud infrastructure.",
+    ],
+  },
+  {
+    role: "DevOps Specialist (Fellowship)",
+    company: "Apexon",
+    location: "",
+    duration: "Feb 2026 - Jun 2026",
+    durationBadge: "FEB 2026 – JUN 2026",
+    accent: "var(--primary)",
+    tags: ["AWS", "Linux", "Terraform", "Ansible", "Jenkins", "Docker", "Kubernetes", "CloudFormation"],
+    highlights: [
+      "Completed an intensive DevOps Fellowship covering AWS Cloud, Linux, Networking, Terraform, Ansible, Jenkins, Docker, Kubernetes, Monitoring, CloudFormation, and Infrastructure Automation.",
+      "Applied DevOps concepts to real-world project work, gaining practical exposure to automation and cloud infrastructure workflows.",
+    ],
   },
 ] as const;
 

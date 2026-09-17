@@ -1045,6 +1045,40 @@
   animation: education-dot-pulse 1.2s ease-in-out infinite;
 }
 
+.experience-timeline-progress {
+  background: linear-gradient(to bottom, var(--signal), var(--primary));
+  box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 52%, transparent);
+}
+
+.experience-timeline-dot {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.experience-timeline-item:hover .experience-card {
+  transform: scale(1.02);
+  border-color: color-mix(in oklab, var(--experience-accent) 48%, transparent);
+  box-shadow:
+    0 28px 54px -26px oklch(0 0 0 / 0.88),
+    0 0 36px -16px color-mix(in oklab, var(--experience-accent) 75%, transparent);
+}
+
+.experience-timeline-item:hover .experience-timeline-dot {
+  animation: education-dot-pulse 1.2s ease-in-out infinite;
+}
+
+.experience-tech-tag {
+  border-color: color-mix(in oklab, var(--experience-accent) 28%, transparent);
+  background: color-mix(in oklab, var(--experience-accent) 8%, transparent);
+  color: var(--ink-soft);
+}
+
+.experience-highlights li::before {
+  background: var(--experience-accent);
+  box-shadow: 0 0 9px color-mix(in oklab, var(--experience-accent) 68%, transparent);
+}
+
 .education-highlights {
   color: var(--ink-soft);
   font-size: 0.8rem;

@@ -13,6 +13,7 @@ import {
   Code2,
   Container,
   Copy,
+  Briefcase,
   ExternalLink,
   GraduationCap,
   Github,
@@ -42,6 +43,7 @@ import {
   ABOUT_CARDS,
   CONTACTS,
   EDUCATION,
+  EXPERIENCE,
   NAV_LINKS,
   PROJECTS,
   SKILL_GROUPS,
@@ -576,6 +578,12 @@ function Portfolio() {
     offset: ["start 72%", "end 52%"],
   });
   const timelineScale = useTransform(educationScrollProgress, [0, 0.9], [0, 1]);
+  const experienceTimelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: experienceScrollProgress } = useScroll({
+    target: experienceTimelineRef,
+    offset: ["start 72%", "end 52%"],
+  });
+  const experienceTimelineScale = useTransform(experienceScrollProgress, [0, 0.9], [0, 1]);
   const prefersReducedMotion = useReducedMotion();
   const typedIdentity = useTypingLoop([
     "full-stack developer",
@@ -795,6 +803,93 @@ function Portfolio() {
                   </motion.div>
                 );
               })}
+            </div>
+          </section>
+
+          {/* EXPERIENCE */}
+          <section id="experience" className="pt-24 pb-10">
+            <SectionHeading
+              eyebrow="02 — experience"
+              title="Experience"
+              subtitle="Hands-on work in automation, cloud infrastructure, and dependable delivery."
+            />
+
+            <div ref={experienceTimelineRef} className="relative mx-auto max-w-3xl">
+              <div
+                className="absolute top-2 bottom-2 left-[1.15rem] w-px sm:left-1/2 sm:-translate-x-1/2"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, transparent, var(--signal) 12%, var(--primary) 55%, transparent)",
+                }}
+                aria-hidden="true"
+              />
+              <motion.div
+                className="experience-timeline-progress absolute top-2 bottom-2 left-[1.15rem] w-px origin-top sm:left-1/2 sm:-translate-x-1/2"
+                style={{ scaleY: prefersReducedMotion ? 1 : experienceTimelineScale }}
+                aria-hidden="true"
+              />
+
+              <div className="space-y-7 sm:space-y-10">
+                {EXPERIENCE.map((item, index) => (
+                  <motion.article
+                    key={`${item.company}-${item.role}`}
+                    initial={{ opacity: 0, rotateX: 10, y: 18 }}
+                    whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                    onMouseMove={spotlight}
+                    style={{ "--experience-accent": item.accent } as React.CSSProperties}
+                    className={`experience-timeline-item group relative flex items-start gap-5 pl-11 sm:gap-0 sm:pl-0 ${
+                      index % 2 === 0 ? "sm:pr-[calc(50%+2.5rem)]" : "sm:pl-[calc(50%+2.5rem)]"
+                    }`}
+                  >
+                    <span
+                      className="experience-timeline-dot absolute top-7 left-[0.65rem] z-10 h-4 w-4 rounded-full border-[3px] sm:left-1/2 sm:-translate-x-1/2"
+                      style={{
+                        background: item.accent,
+                        borderColor: "var(--background)",
+                        boxShadow: `0 0 0 4px color-mix(in oklab, ${item.accent} 20%, transparent), 0 0 22px color-mix(in oklab, ${item.accent} 55%, transparent)`,
+                      }}
+                      aria-hidden="true"
+                    />
+                    <div className="experience-card education-card glow-card w-full p-6 sm:p-7">
+                      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+                        <span
+                          className="flex h-9 w-9 items-center justify-center rounded-lg"
+                          style={{
+                            color: item.accent,
+                            background: `color-mix(in oklab, ${item.accent} 12%, transparent)`,
+                          }}
+                          aria-hidden="true"
+                        >
+                          <Briefcase size={18} strokeWidth={1.8} />
+                        </span>
+                        <span
+                          className="experience-duration-badge rounded-full border px-3 py-1 font-mono text-[0.72rem] tracking-wider"
+                          style={{
+                            color: item.accent,
+                            borderColor: `color-mix(in oklab, ${item.accent} 35%, transparent)`,
+                            background: `color-mix(in oklab, ${item.accent} 10%, transparent)`,
+                          }}
+                        >
+                          {item.durationBadge}
+                        </span>
+                      </div>
+                      <span className="font-mono text-[0.68rem] tracking-wider text-ink-dim uppercase">milestone 0{index + 1}</span>
+                      <h3 className="mt-2 text-xl leading-tight text-ink">{item.role}</h3>
+                      <p className="mt-2 text-sm font-semibold" style={{ color: item.accent }}>
+                        {item.company}{item.location ? ` · ${item.location}` : ""}
+                      </p>
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        {item.tags.map((tag) => <span key={tag} className="chip experience-tech-tag px-3 py-1 text-xs">{tag}</span>)}
+                      </div>
+                      <ul className="education-highlights experience-highlights mt-5 space-y-2">
+                        {item.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+                      </ul>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
             </div>
           </section>
 

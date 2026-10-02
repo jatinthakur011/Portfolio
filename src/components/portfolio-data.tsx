@@ -98,6 +98,41 @@ export const EXPERIENCE = [
 
 export const PROJECTS = [
   {
+    accent: "oklch(0.78 0.16 175)",
+    kicker: "// AI · INTERVIEW PREP",
+    category: "FULL-STACK · AI",
+    title: "AI Interview Prep Kit",
+    titleAccent: "Kit",
+    image: "/projects/ai-interview-kit/home.png",
+    images: [
+      "/projects/ai-interview-kit/home.png",
+      "/projects/ai-interview-kit/new-kit.png",
+      "/projects/ai-interview-kit/kit-view.png",
+    ],
+    description:
+      "Turns a job description and company URL into a personalised interview prep kit with a company brief, role breakdown, and study plan.",
+    impact:
+      "Generates a full interview prep kit from a job description, and keeps your manual edits when you regenerate a section.",
+    highlights: [
+      "SSRF-safe crawler with robots.txt support",
+      "Background generation with live status polling",
+      "84 unit tests and a batch CLI",
+    ],
+    badges: ["Live", "Open Source"],
+    tags: ["Next.js", "TypeScript", "Node.js", "Express", "MongoDB", "Gemini API", "JWT"],
+    cardMinHeight: 480,
+    pipeline: ["Plan", "Generate", "Practice"],
+    liveUrl: "https://frontend-gamma-wheat-83.vercel.app/",
+    githubUrl: "https://github.com/jatinthakur011/ai-interview-prep-kit",
+    featured: true,
+    icon: (
+      <>
+        <path d="M12 2v7l4 2-4 2v7" />
+        <path d="M6 6.5h8M6 17.5h12M6 12h7" />
+      </>
+    ),
+  },
+  {
     accent: "oklch(0.68 0.17 258)",
     kicker: "// KUBERNETES · REAL-TIME",
     category: "Full-Stack • DevOps",

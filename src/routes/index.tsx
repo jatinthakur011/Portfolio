@@ -544,6 +544,7 @@ function ShowcaseProjectCard({
   index: number;
   className?: string;
 }) {
+  const projectImages = Array.isArray(project.images) && project.images.length ? project.images : [project.image];
   const primaryTitle = project.title.slice(0, -project.titleAccent.length).trimEnd();
   const liveUrl = project.liveUrl;
   const viewUrl = liveUrl ?? project.githubUrl;
@@ -564,27 +565,49 @@ function ShowcaseProjectCard({
       <div className="project-showcase-media">
         <div className="project-browser-frame">
           <span className="project-browser-dots" aria-hidden="true"><i /><i /><i /></span>
-          <img src={project.image} alt={`${project.title} project preview`} className="project-showcase-image" />
+          <img src={projectImages[0]} alt={`${project.title} project preview`} className="project-showcase-image" />
+          {projectImages.length > 1 ? (
+            <div className="project-showcase-gallery" aria-label={`${project.title} screenshots`}>
+              {projectImages.map((image, imageIndex) => (
+                <img key={`${project.title}-${imageIndex}`} src={image} alt={`${project.title} screenshot ${imageIndex + 1}`} className="project-showcase-gallery-image" />
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
       <div className="project-showcase-content">
         {project.featured ? <span className="project-showcase-featured">★ Featured</span> : null}
-        <p className="project-showcase-category">{project.category}</p>
+        <div className="project-showcase-header-row">
+          <p className="project-showcase-category">{project.category}</p>
+          {project.badges?.length ? (
+            <div className="project-showcase-badges">
+              {project.badges.map((badge) => (
+                <span key={badge} className="project-showcase-badge">{badge}</span>
+              ))}
+            </div>
+          ) : null}
+        </div>
         <h3 className="project-showcase-title">
           {primaryTitle ? <span>{primaryTitle} </span> : null}
           <span className="project-showcase-title-accent">{project.titleAccent}</span>
         </h3>
         <p className="project-showcase-desc">{project.description}</p>
+        {project.impact ? <p className="project-showcase-impact">{project.impact}</p> : null}
+        {project.highlights?.length ? (
+          <ul className="project-showcase-highlights">
+            {project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+          </ul>
+        ) : null}
         <div className="project-showcase-tags">
           {project.tags.map((tag) => (
             <ProjectTag key={tag} tag={tag} />
           ))}
         </div>
         <div className="project-showcase-actions">
-          <a href={viewUrl} target="_blank" rel="noopener noreferrer" className="btn-solid project-showcase-primary">View Project &rarr;</a>
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><Github size={15} aria-hidden="true" /> GitHub</a>
-          {liveUrl ? <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><ExternalLink size={15} aria-hidden="true" /> Live Demo &nearr;</a> : null}
+          {liveUrl ? <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="btn-solid project-showcase-primary">Live</a> : null}
+          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><Github size={15} aria-hidden="true" /> Open Source</a>
         </div>
+        {liveUrl ? <p className="project-showcase-live-note">Backend is on a free tier, so the first load may take ~30s.</p> : null}
       </div>
     </motion.article>
   );

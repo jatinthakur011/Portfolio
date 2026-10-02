@@ -564,7 +564,14 @@ function ShowcaseProjectCard({
       <div className="project-showcase-media">
         <div className="project-browser-frame">
           <span className="project-browser-dots" aria-hidden="true"><i /><i /><i /></span>
-          <img src={projectImages[0]} alt={`${project.title} project preview`} className="project-showcase-image" />
+          <img
+            src={projectImages[0]}
+            alt={`${project.title} project preview`}
+            width={project.imageWidth}
+            height={project.imageHeight}
+            loading="lazy"
+            className="project-showcase-image"
+          />
           {projectImages.length > 1 ? (
             <div className="project-showcase-gallery" aria-label={`${project.title} screenshots`}>
               {projectImages.map((image, imageIndex) => (

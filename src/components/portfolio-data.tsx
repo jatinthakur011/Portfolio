@@ -104,6 +104,8 @@ export const PROJECTS = [
     title: "AI Interview Prep Kit",
     titleAccent: "Kit",
     image: "/projects/ai-interview-kit/home.png",
+    imageWidth: 1280,
+    imageHeight: 768,
     description:
       "Turns a job description and company URL into a personalised interview prep kit with a company brief, role breakdown, and study plan.",
     impact:
@@ -135,6 +137,8 @@ export const PROJECTS = [
     title: "ChatApp on Kubernetes",
     titleAccent: "on Kubernetes",
     image: "/projects/chatapp.png",
+    imageWidth: 1200,
+    imageHeight: 675,
     description:
       "A real-time chat application containerised with Docker and deployed on Kubernetes to practise orchestration and scaling, with a Jenkins pipeline automating the build and deployment on AWS.",
     impact:
@@ -165,6 +169,8 @@ export const PROJECTS = [
     title: "Health Hub",
     titleAccent: "Hub",
     image: "/projects/healthhub.png",
+    imageWidth: 1200,
+    imageHeight: 675,
     description:
       "A healthcare platform that connects patients, doctors and blood donors in one place. Patients can book appointments and consult doctors online, and raise emergency blood requests that reach registered donors.",
     impact:
@@ -190,6 +196,8 @@ export const PROJECTS = [
     title: "Employee Management System",
     titleAccent: "Management System",
     image: "/projects/employee-management.png",
+    imageWidth: 1536,
+    imageHeight: 1024,
     description:
       "A full-stack HR web app that manages the daily operations of an organisation, from employee records and attendance to salary, leave and task assignment, with secure login and real-time communication.",
     impact:
@@ -221,6 +229,8 @@ export const PROJECTS = [
     title: "Automated Linux Server Provisioning & Security Hardening",
     titleAccent: "Security Hardening",
     image: "/projects/linux-provisioning.png",
+    imageWidth: 1536,
+    imageHeight: 1024,
     description:
       "A Bash automation script that takes a fresh Ubuntu server to a secure, ready-to-use baseline in one run, replacing repetitive manual configuration.",
     impact:
@@ -250,6 +260,8 @@ export const PROJECTS = [
     title: "Linux Server Monitoring & Auto-Recovery",
     titleAccent: "Auto-Recovery",
     image: "/projects/linux-monitoring.png",
+    imageWidth: 1536,
+    imageHeight: 1024,
     description:
       "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage and critical services, logs health data, and automatically recovers Nginx when it fails.",
     impact:

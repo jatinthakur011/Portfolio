@@ -547,7 +547,6 @@ function ShowcaseProjectCard({
   const projectImages = Array.isArray(project.images) && project.images.length ? project.images : [project.image];
   const primaryTitle = project.title.slice(0, -project.titleAccent.length).trimEnd();
   const liveUrl = project.liveUrl;
-  const viewUrl = liveUrl ?? project.githubUrl;
 
   return (
     <motion.article
@@ -603,11 +602,18 @@ function ShowcaseProjectCard({
             <ProjectTag key={tag} tag={tag} />
           ))}
         </div>
+        {project.pipelineStrip && project.pipeline?.length ? (
+          <div className="pipeline project-showcase-pipeline" aria-label={`${project.pipeline.join(", ")} pipeline`}>
+            {project.pipeline.map((stage) => (
+              <span key={stage} className="pipeline-stage">{stage}</span>
+            ))}
+          </div>
+        ) : null}
         <div className="project-showcase-actions">
-          {liveUrl ? <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="btn-solid project-showcase-primary">Live</a> : null}
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><Github size={15} aria-hidden="true" /> Open Source</a>
+          {liveUrl ? <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="btn-solid project-showcase-primary">View Live</a> : null}
+          {project.githubUrl ? <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-showcase-secondary"><Github size={15} aria-hidden="true" /> GitHub</a> : null}
         </div>
-        {liveUrl ? <p className="project-showcase-live-note">Backend is on a free tier, so the first load may take ~30s.</p> : null}
+        {project.note ? <p className="project-showcase-live-note">{project.note}</p> : null}
       </div>
     </motion.article>
   );

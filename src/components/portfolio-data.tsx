@@ -114,6 +114,7 @@ export const PROJECTS = [
       "84 unit tests and a batch CLI",
     ],
     badges: ["Live", "Open Source"],
+    note: "Backend is on a free tier, so the first load may take ~30s.",
     tags: ["Next.js", "TypeScript", "Node.js", "Express", "MongoDB", "Gemini API", "JWT"],
     cardMinHeight: 480,
     pipeline: ["Plan", "Generate", "Practice"],
@@ -135,10 +136,19 @@ export const PROJECTS = [
     titleAccent: "on Kubernetes",
     image: "/projects/chatapp.png",
     description:
-      "A real-time chat app containerised with Docker and deployed on Kubernetes to practice orchestration and scaling.",
+      "A real-time chat application containerised with Docker and deployed on Kubernetes to practise orchestration and scaling, with a Jenkins pipeline automating the build and deployment on AWS.",
+    impact:
+      "Takes a chat app from source code to a running Kubernetes deployment through an automated pipeline.",
+    highlights: [
+      "Dockerised frontend and backend",
+      "Kubernetes deployments and services for orchestration",
+      "Jenkins pipeline for automated build and deploy",
+    ],
+    badges: ["Dockerized", "CI/CD", "Open Source"],
     tags: ["Docker", "Kubernetes", "Jenkins", "AWS"],
     cardMinHeight: 480,
-    pipeline: ["Build", "Test", "Deploy"],
+    pipeline: ["Git Push", "Jenkins", "Docker", "Kubernetes", "AWS"],
+    pipelineStrip: true,
     liveUrl: undefined,
     githubUrl: "https://github.com/jatinthakur011/chatapp-k8s",
     icon: (
@@ -152,16 +162,24 @@ export const PROJECTS = [
     accent: "oklch(0.72 0.16 10)",
     kicker: "// HEALTHCARE PLATFORM",
     category: "Full-Stack Web Application",
-    title: "HealthHub",
+    title: "Health Hub",
     titleAccent: "Hub",
     image: "/projects/healthhub.png",
     description:
-      "A healthcare platform connecting patients, doctors, and donors for appointments, consultations, and emergency blood requests.",
+      "A healthcare platform that connects patients, doctors and blood donors in one place. Patients can book appointments and consult doctors online, and raise emergency blood requests that reach registered donors.",
+    impact:
+      "Brings appointments, online consultations and emergency blood requests into a single platform.",
+    highlights: [
+      "Separate flows for patients, doctors and donors",
+      "Appointment booking and online consultation",
+      "Emergency blood request system",
+    ],
+    badges: ["Live"],
     tags: ["React", "Node.js", "MongoDB"],
     cardMinHeight: 480,
     pipeline: ["Build", "Test", "Deploy"],
     featured: true,
-    liveUrl: undefined,
+    liveUrl: "https://healthhubmain.vercel.app/",
     githubUrl: "https://github.com/jatinthakur011/HealthHub",
     icon: <path d="M2 12h4l2-6 4 12 2-8 2 4h6" />,
   },
@@ -173,7 +191,15 @@ export const PROJECTS = [
     titleAccent: "Management System",
     image: "/projects/employee-management.png",
     description:
-      "A web app for HR operations — secure auth, attendance, salary, task assignment, leave management, and real-time communication.",
+      "A full-stack HR web app that manages the daily operations of an organisation, from employee records and attendance to salary, leave and task assignment, with secure login and real-time communication.",
+    impact:
+      "Replaces scattered HR spreadsheets with one secure dashboard for admins and employees.",
+    highlights: [
+      "JWT authentication with protected routes",
+      "Attendance, salary and leave management modules",
+      "Task assignment, announcements and built-in chat",
+    ],
+    badges: ["Open Source"],
     tags: ["React", "Node.js", "MongoDB", "JWT"],
     cardMinHeight: 480,
     pipeline: ["Build", "Test", "Deploy"],
@@ -196,7 +222,15 @@ export const PROJECTS = [
     titleAccent: "Security Hardening",
     image: "/projects/linux-provisioning.png",
     description:
-      "Bash automation that takes a fresh Ubuntu server and applies a repeatable baseline — admin user setup, Nginx deployment, UFW firewall rules, SSH hardening, and automatic security updates, replacing manual server configuration with one repeatable script.",
+      "A Bash automation script that takes a fresh Ubuntu server to a secure, ready-to-use baseline in one run, replacing repetitive manual configuration.",
+    impact:
+      "Sets up a hardened Ubuntu server with one repeatable script instead of manual configuration.",
+    highlights: [
+      "Admin user setup and Nginx deployment",
+      "UFW firewall rules and SSH hardening",
+      "Automatic security updates",
+    ],
+    badges: ["Open Source"],
     tags: ["Bash", "Linux", "Nginx", "UFW", "SSH Hardening"],
     cardMinHeight: 620,
     pipeline: ["Provision", "Harden", "Validate"],
@@ -217,7 +251,15 @@ export const PROJECTS = [
     titleAccent: "Auto-Recovery",
     image: "/projects/linux-monitoring.png",
     description:
-      "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage, and critical services (Nginx, SSH), logs health data, and automatically detects and recovers from Nginx failures — scheduled via Cron every 5 minutes, demonstrating basic self-healing infrastructure.",
+      "A Bash-based monitoring system on AWS EC2 that tracks CPU, RAM, disk usage and critical services, logs health data, and automatically recovers Nginx when it fails.",
+    impact:
+      "Detects Nginx failures and restarts it automatically, checked every 5 minutes via Cron.",
+    highlights: [
+      "Monitors CPU, RAM, disk, Nginx and SSH",
+      "Logs health data for later review",
+      "Cron-scheduled self-healing recovery",
+    ],
+    badges: ["Open Source"],
     tags: ["Bash", "AWS EC2", "Cron", "Nginx", "Auto-Recovery"],
     cardMinHeight: 620,
     pipeline: ["Monitor", "Detect", "Recover"],

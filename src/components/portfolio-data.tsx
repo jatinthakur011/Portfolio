@@ -38,7 +38,7 @@ export const EDUCATION = [
     result: "CGPA: 8.25 / 10",
     accent: "var(--signal)",
     description:
-      "Pursuing my degree with a focus on full-stack web development and DevOps practices, building a strong foundation in computer science fundamentals — data structures, operating systems, networks, databases, and cloud computing — through coursework and real-world project work.",
+      "Focus on full-stack development and DevOps; strong base in DSA, OS, networks, DBMS and cloud.",
     highlights: [
       "Data Structures & Algorithms",
       "Operating Systems & Computer Networks",
@@ -52,7 +52,7 @@ export const EDUCATION = [
     result: "Percentage: 81%",
     accent: "var(--primary)",
     description:
-      "Completed my 12th with the PCM (Physics, Chemistry, Mathematics) stream alongside Computer Science, scoring 81%, which strengthened my analytical thinking and laid the groundwork for pursuing engineering.",
+      "Completed PCM with Computer Science; built a strong analytical foundation for engineering and problem-solving.",
     highlights: ["PCM — Physics, Chemistry & Mathematics", "Computer Science"],
   },
   {
@@ -62,7 +62,8 @@ export const EDUCATION = [
     result: "Percentage: 86%",
     accent: "oklch(0.82 0.15 85)",
     description:
-      "Completed my 10th with 86%, building a solid academic foundation across core subjects and developing an early interest in technology and problem-solving.",
+      "Built a strong academic base in mathematics, science and English while developing an early interest in technology.",
+    highlights: ["Mathematics", "Science", "English", "Social Science", "Computer"],
   },
 ] as const;
 

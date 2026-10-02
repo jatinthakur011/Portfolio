@@ -917,7 +917,6 @@ function Portfolio() {
 
           {/* EDUCATION */}
           <section id="education" className="pt-24 pb-10">
-            <div className="education-legacy">
             <SectionHeading
               eyebrow="02 — the foundation"
               title="Education"
@@ -1015,7 +1014,6 @@ function Portfolio() {
                   );
                 })}
               </div>
-            </div>
             </div>
           </section>
 

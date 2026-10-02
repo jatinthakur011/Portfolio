@@ -1224,10 +1224,7 @@
   animation: education-dot-pulse 1.2s ease-in-out infinite;
 }
 
-/* Stacked education showcase */
-.education-legacy {
-  display: none;
-}
+/* Education timeline styles */
 
 .education-showcase-heading {
   margin: 0 auto 2.5rem;

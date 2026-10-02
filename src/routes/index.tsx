@@ -547,6 +547,7 @@ function ShowcaseProjectCard({
   const projectImages = Array.isArray(project.images) && project.images.length ? project.images : [project.image];
   const primaryTitle = project.title.slice(0, -project.titleAccent.length).trimEnd();
   const liveUrl = project.liveUrl;
+  const imageIsWiderThanFrame = project.imageWidth / project.imageHeight > 16 / 10;
 
   return (
     <motion.article
@@ -570,7 +571,7 @@ function ShowcaseProjectCard({
             width={project.imageWidth}
             height={project.imageHeight}
             loading="lazy"
-            className="project-showcase-image"
+            className={`project-showcase-image${imageIsWiderThanFrame ? " project-showcase-image--wide" : ""}`}
           />
           {projectImages.length > 1 ? (
             <div className="project-showcase-gallery" aria-label={`${project.title} screenshots`}>

@@ -104,11 +104,6 @@ export const PROJECTS = [
     title: "AI Interview Prep Kit",
     titleAccent: "Kit",
     image: "/projects/ai-interview-kit/home.png",
-    images: [
-      "/projects/ai-interview-kit/home.png",
-      "/projects/ai-interview-kit/new-kit.png",
-      "/projects/ai-interview-kit/kit-view.png",
-    ],
     description:
       "Turns a job description and company URL into a personalised interview prep kit with a company brief, role breakdown, and study plan.",
     impact:
